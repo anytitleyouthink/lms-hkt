@@ -2,6 +2,7 @@ import { Collection, Db, MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import { UserType } from "~/models/schemas/User.schema";
 import RefreshToken from "~/models/schemas/RefreshToken.schema";
+import Course from "~/models/schemas/Course.schema";
 
 
 dotenv.config();
@@ -48,6 +49,9 @@ async indexRefreshTokens() {
   }
   get refreshTokens(): Collection<RefreshToken> {
     return this.db.collection(process.env.DB_REFRESH_TOKENS_COLLECTION as string );
+  }
+  get courses(): Collection<Course> {
+    return this.db.collection(process.env.DB_COURSES_COLLECTION as string)
   }
 }
 

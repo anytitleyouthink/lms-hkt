@@ -1,6 +1,6 @@
-import { tr } from "@faker-js/faker/.";
+import { th, tr } from "@faker-js/faker/.";
 import { ObjectId } from "mongodb";
-import {UserRole} from "~/constants/enums";
+import {UserRole, UserStatus} from "~/constants/enums";
 
 
 export interface UserType {
@@ -14,6 +14,7 @@ export interface UserType {
   created_at?: Date
   updated_at?: Date
   email_verify_token?: string
+  status: UserStatus
   forgot_password_token?: string
   bio?: string
   phone?: string
@@ -36,6 +37,7 @@ export default class UserSchema {
   role: UserRole
   isFirstLogin?: boolean
   forgot_password_token: string
+  status: UserStatus
   bio?: string
   location?: string
   website?: string
@@ -45,6 +47,7 @@ export default class UserSchema {
   constructor(user: UserType) {
     const date = new Date()
     this._id = user._id ?? new ObjectId()
+    this.status = user.status?? UserStatus.Active
     this.name = user.name ?? ''
     this.email = user.email
     this.phone = user.phone ?? ''

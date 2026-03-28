@@ -20,7 +20,7 @@ import {
   firstLoginSchema,
   createUserByAdminSchema
 } from "~/validations/users.validation";
-import { UserRole } from "~/constants/enums";
+import { UserRole, UserStatus } from "~/constants/enums";
 // --- 1. VALIDATOR MIDDLEWARES (Dùng Zod) ---
 
 // --- LOGIN VALIDATOR ---
@@ -36,6 +36,9 @@ export const loginValidator = [
     if (!user) {
       return next(new ErrorResponse(userMessages.EMAIL_OR_PASSWORD_INVALID, StatusCodes.UNAUTHORIZED));
     }
+    if (user.status === UserStatus.Banned) {
+  return next(new ErrorResponse(userMessages.USER_BANNED, StatusCodes.FORBIDDEN));
+}
     
     req.user = user; 
     next();

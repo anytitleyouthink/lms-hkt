@@ -4,7 +4,7 @@ import databaseService from "./database.services";
 import { hashPassword } from "~/utils/crypto";
 import UserSchema from "~/models/schemas/User.schema";
 import { signToken, verifyToken } from "~/utils/jwt";
-import { token_type, UserRole } from "~/constants/enums";
+import { token_type, UserRole, UserStatus } from "~/constants/enums";
 import RefreshToken from "~/models/schemas/RefreshToken.schema";
 import { ObjectId } from "mongodb";
 import { SignOptions } from "jsonwebtoken";
@@ -270,7 +270,9 @@ class UsersService {
       isFirstLogin: true,
       username: "user"+ Math.floor(Math.random() * 10000),  
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
+        status: UserStatus.Active
+
     });
 
     await databaseService.users.insertOne(user);

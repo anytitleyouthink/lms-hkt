@@ -9,3 +9,12 @@ export enum UserRole {
   Trainer = 'trainer',
   Admin = 'admin'
 }
+export enum UserStatus {
+  Active,  
+  Banned,  
+}
+export enum CourseStatus {
+  Draft,     
+  Published, 
+  Archived   
+}

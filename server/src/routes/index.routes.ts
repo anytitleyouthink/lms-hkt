@@ -5,11 +5,11 @@ import { UserRole } from "~/constants/enums";
 import authRouter from "./auth.routes";
 import { ad } from "@faker-js/faker/dist/airline-Dz1uGqgJ";
 import adminRouter from "./admin.routes";
+import coursesRouter from "./courses.routes";
 
 const rootRouter = Router();
 rootRouter.use('/auth', authRouter)
 
-// 2. Nhóm User (địa chỉ sẽ là /users/me, /users/:username...)
 rootRouter.use('/users',
   accessTokenValidationMiddleware,
     userRoutes)
@@ -20,5 +20,6 @@ rootRouter.use('/admin',
   // accessTokenValidationMiddleware, 
   // checkRoleMiddleware([UserRole.Admin]), 
   adminRouter)
+rootRouter.use('/courses', coursesRouter)
 
 export default rootRouter

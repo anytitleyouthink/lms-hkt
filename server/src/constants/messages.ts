@@ -87,24 +87,13 @@ INVALID_FORGOT_PASSWORD_TOKEN:'INVALID FORGOT PASSWORD TOKEN',
 
   RESEND_VERIFY_EMAIL_SUCCESS: 'Verification email resent successfully',
 } as const;
-export const postMessages = {
-  POST_NOT_FOUND: 'Post not found',
-  MEDIA_TYPE_INVALID: 'Media type invalid',
-  GET_POST_CHILDREN_SUCCESS: 'Get post children success',
-  POST_CIRCLE_IS_EMPTY: 'Post circle is empty',
-  POST_IS_NOT_PUBLIC: 'Post is not public',
-  POST_CIRCLE_NOT_FOUND: 'Post circle not found',
-  INVALID_POST_ID: 'Invalid post id',
-  CREATE_POST_SUCCESS: 'Create post successfully',
-  UPDATE_POST_SUCCESS: 'Update post successfully',
-  BOOKMARK_POST_SUCCESS: 'Bookmark post successfully',
-  UNBOOKMARK_POST_SUCCESS:'UnBookmark post successfully',
-  HASHTAGS_MUST_BE_STRINGS: 'Hashtags must be an array of strings',
-  PARENT_ID_MUST_BE_EMPTY_STRING: 'Parent id must be empty string',
-  PARENT_ID_MUST_BE_A_VALID_POST_ID: 'Parent id must be a valid post id',
-  MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Medias must be an array of media objects',
-  HASHTAG_ID_INVALID: 'Hashtag must be an array of user id',
-  MENTIONS_ID_INVALID: 'Mentions must be an array of user id',
-  CONTENT_MUST_BE_EMPTY_STRING: 'Content must be empty string',
-  
+export const courseMessages = {
+  COURSE_CREATED_SUCCESS: 'Course created successfully',
+  COURSE_NOT_FOUND: 'Course not found',
+    COURSE_TITLE_REQUIRED :'Tiêu đề khóa học phải có ít nhất 5 ký tự',
+  COURSE_TITLE_TOO_SHORT: 'Tiêu đề khóa học phải có ít nhất 5 ký tự',
+  COURSE_DESCRIPTION_TOO_SHORT: 'Mô tả khóa học phải có ít nhất 10 ký tự',
+  COURSE_THUMBNAIL_INVALID: 'Link ảnh thumbnail không hợp lệ',
+  COURSE_UPDATED_SUCCESS: 'Course updated successfully',
+  COURSE_DELETED_SUCCESS: 'Course deleted successfully',
 } as const;

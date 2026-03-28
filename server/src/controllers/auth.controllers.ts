@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import usersService from "~/services/users.services";
 // Constants & Errors
 import { userMessages } from "~/constants/messages";
-import { UserRole } from "~/constants/enums";
+import { UserRole, UserStatus } from "~/constants/enums";
 import { ErrorResponse } from "~/models/Errors";
 import {
   LoginReqBody,
@@ -20,6 +20,7 @@ import {
   TokenPayload,
 } from "~/models/requests/User.requests"; 
 import { UserType } from "~/models/schemas/User.schema";
+import databaseService from "~/services/database.services";
 
 
 
@@ -72,7 +73,14 @@ export const refreshTokenController = async (
     })
   }
 
+
   const decoded = req.decoded_refresh_token as TokenPayload
+  const user = await databaseService.users.findOne({ _id: new ObjectId(decoded.user_id) })
+  if (!user || user.status === UserStatus.Banned) {
+    return res.status(403).json({
+      message: userMessages.USER_BANNED
+    })
+  }
 
   const result = await usersService.refreshToken(
     decoded.user_id,
