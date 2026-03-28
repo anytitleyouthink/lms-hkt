@@ -18,3 +18,8 @@ export enum CourseStatus {
   Published, 
   Archived   
 }
+export enum LessonType {
+  Video,    
+  Reading,  
+  Quiz  
+}

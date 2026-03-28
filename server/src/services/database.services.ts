@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import { UserType } from "~/models/schemas/User.schema";
 import RefreshToken from "~/models/schemas/RefreshToken.schema";
 import Course from "~/models/schemas/Course.schema";
+import Section from "~/models/schemas/Section.schema";
+import Lesson from "~/models/schemas/Lesson.schema";
 
 
 dotenv.config();
@@ -52,6 +54,12 @@ async indexRefreshTokens() {
   }
   get courses(): Collection<Course> {
     return this.db.collection(process.env.DB_COURSES_COLLECTION as string)
+  }
+  get sections(): Collection<Section> {
+  return this.db.collection(process.env.DB_SECTIONS_COLLECTION as string)
+  }
+  get lessons(): Collection<Lesson> {
+  return this.db.collection(process.env.DB_LESSONS_COLLECTION as string)
   }
 }
 

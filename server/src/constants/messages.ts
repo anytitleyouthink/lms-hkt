@@ -90,10 +90,29 @@ INVALID_FORGOT_PASSWORD_TOKEN:'INVALID FORGOT PASSWORD TOKEN',
 export const courseMessages = {
   COURSE_CREATED_SUCCESS: 'Course created successfully',
   COURSE_NOT_FOUND: 'Course not found',
+  COURSE_ID_INVALID: 'Course ID is invalid',
     COURSE_TITLE_REQUIRED :'Tiêu đề khóa học phải có ít nhất 5 ký tự',
   COURSE_TITLE_TOO_SHORT: 'Tiêu đề khóa học phải có ít nhất 5 ký tự',
   COURSE_DESCRIPTION_TOO_SHORT: 'Mô tả khóa học phải có ít nhất 10 ký tự',
   COURSE_THUMBNAIL_INVALID: 'Link ảnh thumbnail không hợp lệ',
   COURSE_UPDATED_SUCCESS: 'Course updated successfully',
   COURSE_DELETED_SUCCESS: 'Course deleted successfully',
+  GET_COURSES_SUCCESS: 'Get courses successfully',
+  SECTION_TITLE_TOO_SHORT: 'Section title must be at least 2 characters',
+  GET_COURSE_BY_ID_SUCCESS: 'Get course by ID successfully',
+  SECTION_CREATED_SUCCESS: 'Section created successfully',
+  GET_SECTIONS_SUCCESS: 'Get sections successfully',
+  SECTION_ID_INVALID: 'Section ID is invalid',
+  SECTION_NOT_FOUND: 'Section not found',
+  LESSON_TITLE_TOO_SHORT: 'Lesson title must be at least 2 characters',
+  LESSON_CREATED_SUCCESS: 'Lesson created successfully',
+  GET_LESSONS_SUCCESS: 'Get lessons successfully',
+  
+
+} as const;
+export const mediaMessages = {
+  UPLOAD_IMAGE_SUCCESS: 'Upload image successfully',
+  UPLOAD_VIDEO_SUCCESS: 'Upload video successfully',
+  UPLOAD_DOCUMENT_SUCCESS: 'Upload document successfully',
+  NOT_FOUND_FILE: 'No file found in the request',
 } as const;

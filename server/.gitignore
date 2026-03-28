@@ -6,7 +6,9 @@ node_modules/
 .env
 .env.*
 !.env.example
-
+# Firebase Service Account Key
+serviceAccountKey.json
+lms-hkt-firebase-adminsdk-fbsvc-ca925dfa9f.json
 # build
 dist/
 build/

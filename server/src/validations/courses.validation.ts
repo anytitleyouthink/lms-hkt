@@ -12,3 +12,9 @@ export const createCourseSchema = z.object({
 })
 
 export type CreateCourseReqBody = z.infer<typeof createCourseSchema>['body']
+export const courseIdSchema = z.object({
+  params: z.object({
+    course_id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'ID khóa học không hợp lệ')
+  })
+})
+export type CourseIdParams = z.infer<typeof courseIdSchema>['params']

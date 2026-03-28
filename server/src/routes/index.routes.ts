@@ -6,6 +6,9 @@ import authRouter from "./auth.routes";
 import { ad } from "@faker-js/faker/dist/airline-Dz1uGqgJ";
 import adminRouter from "./admin.routes";
 import coursesRouter from "./courses.routes";
+import sectionsRouter from "./sections.routes";
+import lessonsRouter from "./lessons.routes";
+import mediasRouter from "./medias.routes";
 
 const rootRouter = Router();
 rootRouter.use('/auth', authRouter)
@@ -21,5 +24,11 @@ rootRouter.use('/admin',
   // checkRoleMiddleware([UserRole.Admin]), 
   adminRouter)
 rootRouter.use('/courses', coursesRouter)
+rootRouter.use('/sections', sectionsRouter)
+rootRouter.use('/lessons', lessonsRouter)
+rootRouter.use('/medias',
+  //  accessTokenValidationMiddleware, 
+  //  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
+  mediasRouter)
 
 export default rootRouter
