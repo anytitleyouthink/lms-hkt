@@ -3,7 +3,7 @@ import { LessonType } from '~/constants/enums'
 
 interface LessonPayload {
   _id?: ObjectId
-  course_id: ObjectId   // Để truy vấn cực nhanh toàn bộ bài giảng của 1 khóa
+   // Để truy vấn cực nhanh toàn bộ bài giảng của 1 khóa
   section_id: ObjectId  // Thuộc chương nào
   title: string
   content?: string      // Chứa nội dung text (hoặc HTML do AI sinh ra)
@@ -16,7 +16,6 @@ interface LessonPayload {
 
 export default class Lesson {
   _id: ObjectId
-  course_id: ObjectId
   section_id: ObjectId
   title: string
   content: string
@@ -27,7 +26,7 @@ export default class Lesson {
   updated_at: Date
   constructor(lesson: LessonPayload) {
     this._id = lesson._id || new ObjectId()
-    this.course_id = lesson.course_id
+    
     this.section_id = lesson.section_id
     this.title = lesson.title
     this.content = lesson.content || ''

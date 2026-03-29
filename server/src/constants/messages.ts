@@ -116,3 +116,16 @@ export const mediaMessages = {
   UPLOAD_DOCUMENT_SUCCESS: 'Upload document successfully',
   NOT_FOUND_FILE: 'No file found in the request',
 } as const;
+export const quizMessages = {
+  QUIZ_CREATED_SUCCESS: 'Quiz created successfully',
+  QUIZ_NOT_FOUND: 'Quiz not found',
+  QUIZ_ID_INVALID: 'Quiz ID is invalid',
+  GET_QUIZ_BY_ID_SUCCESS: 'Get quiz by ID successfully',
+  QUIZ_TITLE_TOO_SHORT: 'Quiz title must be at least 5 characters',
+  PASSING_SCORE_INVALID: 'Passing score must be between 1 and 100',
+  QUESTION_TEXT_REQUIRED: 'Question text is required',
+  OPTIONS_REQUIRED: 'At least 2 options are required',
+  CORRECT_ANSWER_INVALID: 'Correct answer index is invalid',
+  QUIZ_DELETED_SUCCESS: 'Quiz deleted successfully',
+  MISSING_FIELDS: 'Missing required fields: pdf_url, lesson_id, and title are required',
+} as const;

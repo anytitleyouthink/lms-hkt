@@ -1,9 +1,11 @@
 import { Router } from 'express'
-import { createCourseController, getCourseByIdController, getCoursesController } from '~/controllers/courses.controllers'
-import { courseIdValidator, createCourseValidator } from '~/middlewares/courses.middlewares'
+import { createCourseController, getCourseByIdController, getCoursesController, updateCourseController } from '~/controllers/courses.controllers'
+import { courseIdValidator, createCourseValidator, updateCourseValidator } from '~/middlewares/courses.middlewares'
 import { accessTokenValidationMiddleware, checkRoleMiddleware } from '~/middlewares/users.middleware'
 import { wrapAsync } from '~/utils/handlers'
 import { UserRole } from '~/constants/enums'
+import { updateCourseSchema } from '~/validations/courses.validation'
+import validate from 'uuid/dist/validate'
 
 const coursesRouter = Router()
 coursesRouter.post(
@@ -24,5 +26,13 @@ coursesRouter.get(
   accessTokenValidationMiddleware,
   courseIdValidator, 
   wrapAsync(getCourseByIdController)
+)
+coursesRouter.patch(
+  '/:course_id',
+  accessTokenValidationMiddleware,
+  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
+  courseIdValidator,             
+ updateCourseValidator,
+  wrapAsync(updateCourseController)
 )
 export default coursesRouter

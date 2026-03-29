@@ -21,10 +21,6 @@ mediasRouter.post(
 )
 
 // API Up Tài liệu (Cho AI)
-mediasRouter.post(
-  '/upload-doc',
-  uploadDocMiddleware.single('doc'),
-  wrapAsync(uploadMediaController('documents'))
-)
+
 
 export default mediasRouter

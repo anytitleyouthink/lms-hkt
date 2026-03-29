@@ -9,6 +9,7 @@ import coursesRouter from "./courses.routes";
 import sectionsRouter from "./sections.routes";
 import lessonsRouter from "./lessons.routes";
 import mediasRouter from "./medias.routes";
+import quizzesRouter from "./quizzes.routes";
 
 const rootRouter = Router();
 rootRouter.use('/auth', authRouter)
@@ -30,5 +31,10 @@ rootRouter.use('/medias',
   //  accessTokenValidationMiddleware, 
   //  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
   mediasRouter)
+  rootRouter.use('/quizzes',
+  //  accessTokenValidationMiddleware, 
+  //  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
+  quizzesRouter
+  )
 
 export default rootRouter

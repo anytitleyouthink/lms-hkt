@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { courseMessages } from '~/constants/messages'
 import coursesService from '~/services/courses.services'
-import { CourseIdParams, CreateCourseReqBody } from '~/validations/courses.validation'
+import { CourseIdParams, CreateCourseReqBody, UpdateCourseReqBody } from '~/validations/courses.validation'
 
 export const createCourseController = async (
   req: Request<any, any, CreateCourseReqBody>,
@@ -34,6 +34,20 @@ export const getCourseByIdController = async (req: Request<any, any, any, Course
 
   return res.json({
     message: courseMessages.GET_COURSE_BY_ID_SUCCESS,
+    result
+  })
+}
+export const updateCourseController = async (
+  req: Request<CourseIdParams, any, UpdateCourseReqBody>,
+  res: Response
+) => {
+  const { course_id } = req.params
+  const payload = req.body
+
+  const result = await coursesService.updateCourse(course_id, payload)
+
+  return res.json({
+    message: courseMessages.COURSE_UPDATED_SUCCESS,
     result
   })
 }

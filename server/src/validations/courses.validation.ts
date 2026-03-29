@@ -18,3 +18,14 @@ export const courseIdSchema = z.object({
   })
 })
 export type CourseIdParams = z.infer<typeof courseIdSchema>['params']
+
+export const updateCourseSchema = z.object({
+  body: z.object({
+    title: z.string().trim().min(5).optional(),
+    description: z.string().trim().optional(),
+    thumbnail: z.string().url().optional(), 
+    status: z.nativeEnum(CourseStatus).optional()
+  })
+})
+
+export type UpdateCourseReqBody = z.infer<typeof updateCourseSchema>['body']

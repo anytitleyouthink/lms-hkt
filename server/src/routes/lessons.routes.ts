@@ -6,12 +6,14 @@ import { createLessonSchema } from '~/validations/lessons.validation'
 import { UserRole } from '~/constants/enums'
 import { wrapAsync } from '~/utils/handlers'
 import { validate } from '~/utils/validation'
+import { sectionIdValidator } from '~/middlewares/sections.middlewares'
 const lessonsRouter = Router()
 lessonsRouter.post(
   '/',
   accessTokenValidationMiddleware,
   checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
   validate(createLessonSchema),
+  sectionIdValidator,
   wrapAsync(createLessonController)
 )
 

@@ -15,10 +15,7 @@ userRouter.patch(
   filterMiddleware(['name', 'date_of_birth', 'bio', 'location', 'website', 'username', 'avatar', 'cover_photo', 'phone'] as (keyof UpdateMeReqBody)[]),
   wrapAsync(updateMeController)
 );
-
 userRouter.put('/change-password', changePasswordValidator, wrapAsync(changePasswordController));
-
-// Xem profile người khác (Có thể để public hoặc private tùy bạn)
 userRouter.get('/:username', wrapAsync(getProfileController));
 
 export default userRouter;

@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
 import databaseService from './database.services'
 import Course from '~/models/schemas/Course.schema'
-import { CreateCourseReqBody } from '~/validations/courses.validation'
+import { CreateCourseReqBody, UpdateCourseReqBody } from '~/validations/courses.validation'
 import { CourseStatus, UserRole } from '~/constants/enums'
 import { ErrorResponse } from '~/models/Errors'
 import { courseMessages } from '~/constants/messages'
@@ -42,6 +42,24 @@ class CoursesService {
     })
 
     // Lỡ user truyền ID đúng format 24 ký tự nhưng không có thật trong DB
+    if (!course) {
+      throw new ErrorResponse(courseMessages.COURSE_NOT_FOUND, 404)
+    }
+
+    return course
+  }
+  async updateCourse(course_id: string, payload: UpdateCourseReqBody) {
+    const course = await databaseService.courses.findOneAndUpdate(
+      { _id: new ObjectId(course_id) },
+      {
+        $set: {
+          ...payload,
+          updated_at: new Date()
+        }
+      },
+      { returnDocument: 'after' } 
+    )
+
     if (!course) {
       throw new ErrorResponse(courseMessages.COURSE_NOT_FOUND, 404)
     }

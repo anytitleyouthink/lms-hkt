@@ -5,6 +5,7 @@ import RefreshToken from "~/models/schemas/RefreshToken.schema";
 import Course from "~/models/schemas/Course.schema";
 import Section from "~/models/schemas/Section.schema";
 import Lesson from "~/models/schemas/Lesson.schema";
+import Quiz from "~/models/schemas/Quiz.schema";
 
 
 dotenv.config();
@@ -61,6 +62,9 @@ async indexRefreshTokens() {
   get lessons(): Collection<Lesson> {
   return this.db.collection(process.env.DB_LESSONS_COLLECTION as string)
   }
+  get quizzes(): Collection<Quiz> {
+  return this.db.collection('quizzes')
+}
 }
 
 const databaseService = new DatabaseService();

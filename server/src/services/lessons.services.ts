@@ -5,12 +5,12 @@ import { CreateLessonReqBody } from '~/validations/lessons.validation'
 
 class LessonsService {
   async createLesson(payload: CreateLessonReqBody) {
-    const { course_id, section_id, title, content, media_url, type } = payload
+    const { section_id, title, content, media_url, type } = payload
     const lessonCount = await databaseService.lessons.countDocuments({
       section_id: new ObjectId(section_id)
     })
     const newLesson = new Lesson({
-      course_id: new ObjectId(course_id),
+    
       section_id: new ObjectId(section_id),
       title,
       content,
