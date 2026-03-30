@@ -12,7 +12,7 @@ userRouter.get('/me', wrapAsync(getMeController));
 userRouter.patch(
   '/me',
   updateMeValidator, 
-  filterMiddleware(['name', 'date_of_birth', 'bio', 'location', 'website', 'username', 'avatar', 'cover_photo', 'phone'] as (keyof UpdateMeReqBody)[]),
+  filterMiddleware(['name', 'date_of_birth', 'bio', 'location', 'website', 'username', 'cover_photo', 'phone'] as (keyof UpdateMeReqBody)[]),
   wrapAsync(updateMeController)
 );
 userRouter.put('/change-password', changePasswordValidator, wrapAsync(changePasswordController));

@@ -1,5 +1,5 @@
 
-import { ParamsDictionary } from "express-serve-static-core"
+import { ParamsDictionary } from 'express-serve-static-core'
 
 export interface VerifyEmailReqBody {
   email_verify_token: string

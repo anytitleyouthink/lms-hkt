@@ -10,6 +10,9 @@ import sectionsRouter from "./sections.routes";
 import lessonsRouter from "./lessons.routes";
 import mediasRouter from "./medias.routes";
 import quizzesRouter from "./quizzes.routes";
+import messagesRoutes from "./messages.routes";
+import { en } from "@faker-js/faker/.";
+import enrollmentsRouter from "./enrollments.routes";
 
 const rootRouter = Router();
 rootRouter.use('/auth', authRouter)
@@ -36,5 +39,9 @@ rootRouter.use('/medias',
   //  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
   quizzesRouter
   )
+rootRouter.use('/messages', messagesRoutes);
+rootRouter.use('/enrollments', enrollmentsRouter);
+
+
 
 export default rootRouter

@@ -23,3 +23,8 @@ export enum LessonType {
   Reading,  
   Quiz  
 }
+export enum EnrollmentStatus {
+  Pending,  
+  Approved, 
+  Rejected  
+}

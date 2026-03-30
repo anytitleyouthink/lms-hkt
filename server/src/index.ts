@@ -4,9 +4,15 @@ import cookieParser from 'cookie-parser'
 import { defaultErrorHandler } from './middlewares/error.middlewares';
 import cors from 'cors'
 import rootRouter from './routes/index.routes';
-
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import { setupChatSocket } from './sockets/chat.sockets';
 
 const app = express()
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: { origin: '*' } // Allow all origins for the socket. Adjust in production
+});
 const port = 4000
 app.use(cors())
 app.use(cookieParser())
@@ -18,6 +24,8 @@ databaseService.connect().then(() => {
 app.use("/", rootRouter)
 app.use(defaultErrorHandler);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+setupChatSocket(io);
+
+httpServer.listen(port, () => {
+  console.log(`Example app listening on port ${port} with Socket.io`)
 })

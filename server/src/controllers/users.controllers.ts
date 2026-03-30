@@ -65,7 +65,7 @@ export  const changePasswordController= async(req: Request<ParamsDictionary, any
 }
 export const createUserController = async (req: Request<ParamsDictionary, any, CreateUserByAdminReqBody>, res: Response) => {
 const { name, email, role, } = req.body
-const defaultPassword = 'victoryTTT@123'
+const defaultPassword = process.env.DEFAULTPassword || '12345678';
 const result = await usersService.createUserByAdmin({ name, email, role, password: defaultPassword })
 const { refresh_token, access_token } = result;
      res.cookie('refresh_token', refresh_token, {

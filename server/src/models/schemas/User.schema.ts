@@ -62,7 +62,7 @@ export default class UserSchema {
     this.location = user.location
     this.website = user.website
     this.username = user.username
-    this.avatar = user.avatar
+    this.avatar = user.avatar ?? 'https://res.cloudinary.com/drmlhwutz/image/upload/v1774888646/lms/images/ea6ac8e4-6470-4cb9-bedf-9ce58f65838a-anhdaidienmacdinh.jpg'
     this.cover_photo = user.cover_photo
   }
 }

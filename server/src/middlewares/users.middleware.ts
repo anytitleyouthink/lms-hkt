@@ -129,6 +129,7 @@ export const accessTokenValidationMiddleware = async (req: Request, res: Respons
     try {
         const decoded_access_token = await verifyToken(access_token, process.env.JWT_PRIVATE_ACCESS_TOKEN as string);
         (req as Request).decoded_access_token = decoded_access_token;
+      
         next();
     } catch (error) {
         next(new ErrorResponse(userMessages.ACCESS_TOKEN_EXPIRED, StatusCodes.UNAUTHORIZED));
@@ -202,7 +203,16 @@ export const isUserLoggedInValidator = (
 };
 export const checkRoleMiddleware = (allowedRoles: UserRole[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const { role } = req.decoded_access_token as { role: UserRole }
+    const decoded = (req as any).decoded_access_token
+   // Debug log
+    if (!decoded || !decoded.role) {
+      return next(
+        new ErrorResponse(userMessages.ROLE_NOT_FOUND, StatusCodes.UNAUTHORIZED)
+      )
+    }
+
+    const { role } = decoded as { role: UserRole }
+   
     if (!allowedRoles.includes(role)) {
       return next(
         new ErrorResponse(userMessages.CHECK_ROLE_PERMISSION_ERROR, StatusCodes.FORBIDDEN)
