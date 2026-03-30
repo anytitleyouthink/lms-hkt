@@ -3,8 +3,8 @@
 import React from 'react';
 import { Plus } from "lucide-react";
 // Sửa lại đường dẫn import: Thêm /ui/ và dùng tên thư mục user_management giống trong máy của bạn
-import StatCard from '../../../components/ui/user_management/StatCard';
-import UserTable, { User } from '../../../components/ui/user_management/UserTable';
+import StatCard from '../../../components/ui/StatCard';
+import UserTable, { User } from '../../../components/ui/UserTable';
 
 // Dữ liệu nội dung (Data)
 const TEXT_CONTENT = {
