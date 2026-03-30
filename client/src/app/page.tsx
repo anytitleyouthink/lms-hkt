@@ -21,7 +21,7 @@ export default function HomePage() {
       
       {/* Tiêu đề */}
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-black text-[#2b3674] tracking-tight">Welcome back, Tiến</h1>
+        <h1 className="text-3xl md:text-4xl font-black text-[#2b3674] tracking-tight">Chào mừng, ...</h1>
       </div>
 
       {/* Dòng 1: Tiến độ và Hồ sơ */}
