@@ -55,6 +55,7 @@ export default function UserTable({ title, columns, users, btnFilterText, btnExp
                     ))}
                 </tbody>
             </table>
+            </div>
         </div>
     );
 }
