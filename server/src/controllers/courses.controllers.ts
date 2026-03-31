@@ -17,9 +17,10 @@ export const createCourseController = async (
 export const getCoursesController = async (req: Request, res: Response) => {
   // Lấy user_id và role từ Token đã giải mã
   const { user_id, role } = req.decoded_access_token as any
+  const search = req.query.search as string | undefined
 
   // Gọi Service
-  const result = await coursesService.getCourses(user_id, role)
+  const result = await coursesService.getCourses(user_id, role, search)
 
   return res.json({
     message: courseMessages.GET_COURSES_SUCCESS,

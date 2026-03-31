@@ -90,3 +90,12 @@ return res.status(StatusCodes.CREATED).json({
 
 
 
+
+export const getUsersController = async (req: Request, res: Response) => {
+  const { email } = req.query;
+  const result = await usersService.getUsers(email as string);
+  return res.json({
+    message: userMessages.GET_PROFILE_SUCCESS, // Reused message for simplicity
+    result
+  });
+};

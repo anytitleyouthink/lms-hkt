@@ -18,8 +18,7 @@ app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 databaseService.connect().then(() => {
-  databaseService.indexUsers()
-  databaseService.indexRefreshTokens()
+  databaseService.setupAllIndexes()
 })
 app.use("/", rootRouter)
 app.use(defaultErrorHandler);

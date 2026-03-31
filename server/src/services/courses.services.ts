@@ -19,7 +19,7 @@ class CoursesService {
       newCourse
     }
   }
-  async getCourses(user_id: string, role: UserRole) {
+  async getCourses(user_id: string, role: UserRole, searchQuery?: string) {
     let matchCondition: any = {}
 
     if (role === UserRole.Admin) {
@@ -31,6 +31,13 @@ class CoursesService {
     } else if (role === UserRole.Employee) {
       // Employee: Chỉ được xem những khóa học đã được duyệt (Published)
       matchCondition = { status: CourseStatus.Published }
+    }
+
+    if (searchQuery) {
+      matchCondition.$or = [
+        { title: { $regex: searchQuery, $options: 'i' } },
+        { description: { $regex: searchQuery, $options: 'i' } }
+      ]
     }
 
     const courses = await databaseService.courses.find(matchCondition).toArray()

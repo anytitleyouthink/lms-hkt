@@ -30,6 +30,7 @@ enrollmentsRouter.post(
  * Path: /enrollments/pending
  * Method: GET
  * Header: { Authorization: Bearer <access_token> }
+ * Query: { email?: string }
  * Body: Không yêu cầu
  * Return: { message: string, result: Array<Enrollment> }
  */

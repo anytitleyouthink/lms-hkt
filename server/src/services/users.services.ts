@@ -291,7 +291,21 @@ class UsersService {
       access_token,
    
    } };
+  async getUsers(email?: string) {
+    let matchCondition: any = {};
+    if (email) {
+      matchCondition.email = { $regex: email, $options: 'i' };
+    }
+    const users = await databaseService.users.find(matchCondition, {
+      projection: {
+        password: 0,
+        forgot_password_token: 0,
+        email_verify_token: 0
+      }
+    }).toArray();
+    return users;
   }
+}
 const usersService = new UsersService();
 export default usersService;
 

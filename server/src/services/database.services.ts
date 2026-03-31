@@ -35,20 +35,72 @@ class DatabaseService {
     }
   }
   async indexUsers() {
-  await this.users.createIndexes([
-    { key: { email: 1 }, unique: true },
-    { key: { username: 1 }, unique: true }
-  ]);
-}
+    await this.users.createIndexes([
+      { key: { email: 1 }, unique: true },
+      { key: { username: 1 }, unique: true }
+    ]);
+  }
 
-async indexRefreshTokens() {
- 
-  await this.refreshTokens.createIndexes([
-    { key: { token: 1 } },
-    { key: { exp: 1 }, expireAfterSeconds: 0 }
-  ]);
-}
+  async indexRefreshTokens() {
+    await this.refreshTokens.createIndexes([
+      { key: { token: 1 } },
+      { key: { exp: 1 }, expireAfterSeconds: 0 }
+    ]);
+  }
 
+  async indexSections() {
+    await this.sections.createIndexes([{ key: { course_id: 1 } }]);
+  }
+
+  async indexLessons() {
+    await this.lessons.createIndexes([{ key: { section_id: 1 } }]);
+  }
+
+  async indexQuizzes() {
+    await this.quizzes.createIndexes([{ key: { lesson_id: 1 } }]);
+  }
+
+  async indexMessages() {
+    // Indexes on course_id for finding messages in a course room
+    await this.messages.createIndexes([{ key: { course_id: 1 } }]);
+  }
+
+  async indexEnrollments() {
+    await this.enrollments.createIndexes([
+      { key: { user_id: 1, course_id: 1 }, unique: true },
+      { key: { course_id: 1 } },
+      { key: { status: 1 } }
+    ]);
+  }
+
+  async indexCertificates() {
+    await this.certificates.createIndexes([
+      { key: { user_id: 1 } },
+      { key: { user_id: 1, course_id: 1 }, unique: true }
+    ]);
+  }
+
+  async indexUserProgresses() {
+    await this.userProgresses.createIndexes([
+      { key: { user_id: 1, course_id: 1 } },
+      { key: { user_id: 1, course_id: 1, lesson_id: 1 }, unique: true }
+    ]);
+  }
+
+  async setupAllIndexes() {
+    await Promise.all([
+      this.indexUsers(),
+      this.indexRefreshTokens(),
+      this.indexSections(),
+      this.indexLessons(),
+      this.indexQuizzes(),
+      this.indexMessages(),
+      this.indexEnrollments(),
+      this.indexCertificates(),
+      this.indexUserProgresses()
+    ]);
+    console.log(" All indexes created successfully");
+  }
 
 
   get users(): Collection<UserType> {

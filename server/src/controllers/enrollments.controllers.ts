@@ -8,7 +8,7 @@ import { EnrollmentStatus } from '~/constants/enums';
 // Nhân viên xin học (Mặc định: pending)
 export const requestEnrollmentController = async (req: Request, res: Response) => {
   const { course_id } = req.body;
-  const { user_id } = (req as any).decoded_access_token; 
+  const { user_id } = (req as any).decoded_access_token;
   console.log(user_id); // Lấy ID từ Token
 
   try {
@@ -29,7 +29,7 @@ export const requestEnrollmentController = async (req: Request, res: Response) =
     await databaseService.enrollments.insertOne(newEnrollment);
     return res.status(201).json({ message: enrollmentMessages.ENROLLMENT_REQUESTED, result: newEnrollment });
   } catch (error) {
-    return res.status(500).json({  message: enrollmentMessages.ERROR_SERVER });
+    return res.status(500).json({ message: enrollmentMessages.ERROR_SERVER });
   }
 };
 
@@ -52,7 +52,9 @@ export const approveEnrollmentController = async (req: Request, res: Response) =
 };
 export const getPendingEnrollmentsController = async (req: Request, res: Response) => {
   try {
-    const pendingList = await databaseService.enrollments.aggregate([
+    const { email } = req.query;
+
+    const pipeline: any[] = [
       { $match: { status: 'pending' } },
       {
         $lookup: {
@@ -62,7 +64,18 @@ export const getPendingEnrollmentsController = async (req: Request, res: Respons
           as: 'user_info'
         }
       },
-      { $unwind: '$user_info' },
+      { $unwind: '$user_info' }
+    ];
+
+    if (email) {
+      pipeline.push({
+        $match: {
+          'user_info.email': { $regex: email as string, $options: 'i' }
+        }
+      });
+    }
+
+    pipeline.push(
       {
         $lookup: {
           from: 'courses',
@@ -81,7 +94,9 @@ export const getPendingEnrollmentsController = async (req: Request, res: Respons
           'course_info.title': 1
         }
       }
-    ]).toArray()
+    );
+
+    const pendingList = await databaseService.enrollments.aggregate(pipeline).toArray()
 
     return res.json({
       message: enrollmentMessages.GET_ENROLLMENT_BY_ID_SUCCESS,

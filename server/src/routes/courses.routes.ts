@@ -32,6 +32,7 @@ coursesRouter.post(
  * Path: /courses
  * Method: GET
  * Header: { Authorization: Bearer <access_token> }
+ * Query: { search?: string }
  * Body: Không yêu cầu
  * Return: { message: string, result: Array<Course> }
  */
