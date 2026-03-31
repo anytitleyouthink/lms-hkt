@@ -1,4 +1,4 @@
-import Navbar from "@/components/shares/Navbar/Navbar";
+import Navbar from "@/components/shared/Navbar/Navbar";
 
 export default function AuthLayout({
   children,

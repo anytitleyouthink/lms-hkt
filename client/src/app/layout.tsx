@@ -19,13 +19,13 @@ export default function RootLayout({
         <div className="flex min-h-screen bg-[#f8faff]">
           
           {/* Sidebar */}
-          <Sidebar />
+          {/* <Sidebar /> */}
 
           {/* Main content */}
           <div className="flex-1 flex flex-col min-h-screen">
             
             {/* Header */}
-            <Header />
+            {/* <Header /> */}
 
             {/* Page content */}
             <main className="flex-1 overflow-y-auto p-6">

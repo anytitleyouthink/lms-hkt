@@ -21,7 +21,20 @@ export default function HomePage() {
         <p className="text-sm md:text-base font-bold text-slate-600 mb-10 tracking-[0.1em] uppercase">
           Cung cấp hệ thống LMS đa dụng cho nội bộ doanh nghiệp
         </p>
+          {/* Rainbow Button */}
+          <div className="flex justify-center mb-10">
+            <button className="relative p-[2px] rounded-full overflow-hidden group">
+              
+              {/* Gradient border xoay */}
+              <span className="absolute inset-0 bg-[conic-gradient(red,orange,yellow,green,blue,indigo,violet,red)] animate-spin-slow"></span>
 
+              {/* Nội dung button */}
+              <span className="relative block bg-white px-6 py-2 rounded-full font-bold text-sm text-slate-800 group-hover:bg-gray-100 transition">
+                SỬ DỤNG DỊCH VỤ NGAY
+              </span>
+
+            </button>
+          </div>  
         {/* Dashboard Image */}
         <div className="relative mx-auto max-w-5xl group">
           <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-300 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
