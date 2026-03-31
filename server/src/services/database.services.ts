@@ -8,6 +8,8 @@ import Lesson from "~/models/schemas/Lesson.schema";
 import Quiz from "~/models/schemas/Quiz.schema";
 import Message from "~/models/schemas/Message.schema";
 import Enrollment from "~/models/schemas/Enrollment.schema";
+import Certificate from "~/models/schemas/Certificate.schema";
+import UserProgress from "~/models/schemas/UserProgress.schema";
 
 
 dotenv.config();
@@ -73,6 +75,12 @@ async indexRefreshTokens() {
   }
   get enrollments() {
     return this.db.collection<Enrollment>('enrollments')
+  }
+  get certificates(): Collection<Certificate> {
+    return this.db.collection('certificates')
+  }
+  get userProgresses(): Collection<UserProgress> {
+    return this.db.collection('user_progresses')
   }
 }
 

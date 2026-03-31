@@ -93,10 +93,10 @@ export const courseMessages = {
   COURSE_CREATED_SUCCESS: 'Course created successfully',
   COURSE_NOT_FOUND: 'Course not found',
   COURSE_ID_INVALID: 'Course ID is invalid',
-    COURSE_TITLE_REQUIRED :'Tiêu đề khóa học phải có ít nhất 5 ký tự',
-  COURSE_TITLE_TOO_SHORT: 'Tiêu đề khóa học phải có ít nhất 5 ký tự',
-  COURSE_DESCRIPTION_TOO_SHORT: 'Mô tả khóa học phải có ít nhất 10 ký tự',
-  COURSE_THUMBNAIL_INVALID: 'Link ảnh thumbnail không hợp lệ',
+    COURSE_TITLE_REQUIRED :'Course title required  ',
+  COURSE_TITLE_TOO_SHORT: 'Course title must be at least 5 characters',
+  COURSE_DESCRIPTION_TOO_SHORT: 'Course description must be at least 10 characters',
+  COURSE_THUMBNAIL_INVALID: 'Link Thumnail Invalid',
   COURSE_UPDATED_SUCCESS: 'Course updated successfully',
   COURSE_DELETED_SUCCESS: 'Course deleted successfully',
   GET_COURSES_SUCCESS: 'Get courses successfully',
@@ -156,4 +156,18 @@ export const enrollmentMessages = {
   ENROLLMENT_REQUESTED: 'Enrollment request sent, please wait for approval',
   ENROLLMENT_APPROVED: 'Enrollment approved successfully',
   ENROLLMENT_REJECTED: 'Enrollment rejected successfully',
+} as const;
+
+export const certificateMessages = {
+  NOT_ELIGIBLE: 'You are not eligible to receive the certificate',
+  ISSUE_SUCCESS: 'Certificate issued successfully',
+  GET_SUCCESS: 'Certificates retrieved successfully',
+  COURSE_ID_INVALID: 'Course ID is invalid',
+} as const;
+
+export const progressMessages = {
+  COURSE_NOT_FOUND: 'Course not found',
+  LESSON_NOT_FOUND: 'Lesson not found',
+  COMPLETE_SUCCESS: 'Lesson completed successfully',
+  GET_SUCCESS: 'Progress retrieved successfully'
 } as const;

@@ -1,0 +1,86 @@
+// @ts-nocheck
+import React, { useState } from 'react';
+
+// Giả lập Component dùng để mark complete 1 Lesson
+const ProgressHandler = ({ courseId, lessonId, token }: { courseId: string; lessonId: string; token: string }) => {
+  const [loading, setLoading] = useState(false);
+  const [progressData, setProgressData] = useState<{ percentage: number; isEligibleForCertificate: boolean; certCode?: string } | null>(null);
+
+  const handleLessonComplete = async () => {
+    try {
+      setLoading(true);
+      // Gọi API POST /progress/complete
+      const response = await fetch('http://localhost:4000/progress/complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          course_id: courseId,
+          lesson_id: lessonId
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Lỗi khi đánh dấu hoàn thành');
+      }
+
+      const result = data.result;
+      setProgressData(result);
+
+      // Trigger success notification (alert placeholder)
+      if (result.percentage >= 100) {
+        // window.alert có thể thay bằng thư viện toast (như react-toastify)
+        window.alert(`Chúc mừng rực rỡ! Bạn đã hoàn thành 100% khóa học. Mã Chứng Chỉ của bạn: ${result.certCode || 'Đang cập nhật'}`);
+      } else {
+        window.alert(`Mức độ hoàn thành hiện tại: ${result.percentage}%`);
+      }
+    } catch (error: any) {
+      console.error(error);
+      window.alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px', maxWidth: '400px', margin: '20px auto' }}>
+      <h3>Bài Học: {lessonId}</h3>
+      <p>
+        Tiến độ hiện tại:{' '}
+        {progressData ? (
+          <strong style={{ color: progressData.percentage === 100 ? 'green' : 'black' }}>
+            {progressData.percentage}%
+          </strong>
+        ) : (
+          'Chưa rõ'
+        )}
+      </p>
+      <button 
+        onClick={handleLessonComplete} 
+        disabled={loading}
+        style={{
+          padding: '10px 20px',
+          backgroundColor: '#3498db',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: loading ? 'not-allowed' : 'pointer'
+        }}
+      >
+        {loading ? 'Đang cập nhật...' : 'Hoàn thành bài giảng'}
+      </button>
+
+      {progressData?.isEligibleForCertificate && (
+        <div style={{ marginTop: '15px', padding: '10px', backgroundColor: '#d4edda', color: '#155724', borderRadius: '4px' }}>
+          Tuyệt vời! Bạn đã có thể xem chứng nhận tại thư mục chứng chỉ.
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ProgressHandler;

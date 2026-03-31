@@ -6,14 +6,28 @@ import { wrapAsync } from '~/utils/handlers'
 
 const mediasRouter = Router()
 
-// API Up ảnh
+/**
+ * Description: Upload file hình ảnh
+ * Path: /medias/upload-image
+ * Method: POST
+ * Header: Không yêu cầu header đặc biệt ngoài multipart/form-data
+ * FormData: { image: File }
+ * Return: { message: string, result: { url: string } }
+ */
 mediasRouter.post(
   '/upload-image',
   uploadImageMiddleware.single('image'),
   wrapAsync(uploadMediaController('images'))
 )
 
-// API Up Video
+/**
+ * Description: Upload file Video
+ * Path: /medias/upload-video
+ * Method: POST
+ * Header: Không yêu cầu header đặc biệt ngoài multipart/form-data
+ * FormData: { video: File }
+ * Return: { message: string, result: { url: string } }
+ */
 mediasRouter.post(
   '/upload-video',
   uploadVideoMiddleware.single('video'),

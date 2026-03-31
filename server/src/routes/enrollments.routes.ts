@@ -10,18 +10,42 @@ import { accessTokenValidationMiddleware, checkRoleMiddleware } from '~/middlewa
 
 const enrollmentsRouter = Router()
 
-// API cho nhân viên đăng ký học
+/**
+ * Description: Học viên gửi yêu cầu đăng ký một khóa học
+ * Path: /enrollments
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { course_id: string }
+ * Return: { message: string, result: Enrollment }
+ */
 enrollmentsRouter.post(
   '/',
   accessTokenValidationMiddleware,
   enrollValidator,     
   requestEnrollmentController
 )
+
+/**
+ * Description: Lấy danh sách các yêu cầu đăng ký đang chờ duyệt (Pending)
+ * Path: /enrollments/pending
+ * Method: GET
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: Không yêu cầu
+ * Return: { message: string, result: Array<Enrollment> }
+ */
 enrollmentsRouter.get('/pending', 
   accessTokenValidationMiddleware, 
   checkRoleMiddleware([UserRole.Trainer, UserRole.Admin]),
    getPendingEnrollmentsController)
-// API cho Trainer duyệt 
+
+/**
+ * Description: Cập nhật trạng thái duyệt/từ chối yêu cầu đăng ký
+ * Path: /enrollments/:enrollment_id/approve
+ * Method: PATCH
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { status: string } // ví dụ: Approved, Rejected
+ * Return: { message: string, result: Enrollment }
+ */
 enrollmentsRouter.patch(
   '/:enrollment_id/approve',
   accessTokenValidationMiddleware,

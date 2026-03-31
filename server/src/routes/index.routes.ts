@@ -13,6 +13,8 @@ import quizzesRouter from "./quizzes.routes";
 import messagesRoutes from "./messages.routes";
 import { en } from "@faker-js/faker/.";
 import enrollmentsRouter from "./enrollments.routes";
+import certificatesRouter from "./certificates.routes";
+import progressRouter from "./progress.routes";
 
 const rootRouter = Router();
 rootRouter.use('/auth', authRouter)
@@ -41,6 +43,8 @@ rootRouter.use('/medias',
   )
 rootRouter.use('/messages', messagesRoutes);
 rootRouter.use('/enrollments', enrollmentsRouter);
+rootRouter.use('/certificates', certificatesRouter);
+rootRouter.use('/progress', progressRouter);
 
 
 

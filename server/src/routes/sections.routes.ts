@@ -6,7 +6,14 @@ import { wrapAsync } from '~/utils/handlers'
 
 const sectionsRouter = Router()
 
-// Tạo chương mới
+/**
+ * Description: Tạo mới một chương (Section)
+ * Path: /sections
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { course_id, title, order }
+ * Return: { message: string, result: Section }
+ */
 sectionsRouter.post(
   '/',
   accessTokenValidationMiddleware,
@@ -14,7 +21,14 @@ sectionsRouter.post(
   wrapAsync(createSectionController)
 )
 
-// Lấy danh sách chương của 1 khóa học (Dùng Course ID)
+/**
+ * Description: Lấy danh sách các chương của 1 khóa học bằng Course ID
+ * Path: /sections/course/:course_id
+ * Method: GET
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: Không yêu cầu
+ * Return: { message: string, result: Array<Section> }
+ */
 sectionsRouter.get(
   '/course/:course_id',
   accessTokenValidationMiddleware,
