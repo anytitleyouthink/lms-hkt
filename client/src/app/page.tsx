@@ -1,5 +1,6 @@
 'use client'
 import Image from "next/image";
+import Link from "next/link"; // 1. Quan trọng: Phải import Link
 
 export default function HomePage() {
   return (
@@ -17,30 +18,32 @@ export default function HomePage() {
           HỆ THỐNG ĐA DỤNG, <br />
           LMS CHO DOANH NGHIỆP
         </h1>
-        
+
         <p className="text-sm md:text-base font-bold text-slate-600 mb-10 tracking-[0.1em] uppercase">
           Cung cấp hệ thống LMS đa dụng cho nội bộ doanh nghiệp
         </p>
-          {/* Rainbow Button */}
-          <div className="flex justify-center mb-10">
-            <button className="relative p-[2px] rounded-full overflow-hidden group">
-              
-              {/* Gradient border xoay */}
-              <span className="absolute inset-0 bg-[conic-gradient(red,orange,yellow,green,blue,indigo,violet,red)] animate-spin-slow"></span>
+        {/* Rainbow Button */}
+        <div className="flex justify-center mb-10">
+          <Link href="/main" className="relative p-[2px] rounded-full overflow-hidden group transition-transform active:scale-95 duration-200">
+            <button className="relative p-[2px] rounded-full overflow-hidden group transition-transform active:scale-95 duration-200">
+
+              {/* Hiệu ứng viền xoay */}
+              <span className="absolute inset-0 bg-[conic-gradient(red,orange,yellow,green,blue,indigo,violet,red)] animate-[spin_3s_linear_infinite]"></span>
 
               {/* Nội dung button */}
-              <span className="relative block bg-white px-6 py-2 rounded-full font-bold text-sm text-slate-800 group-hover:bg-gray-100 transition">
+              <span className="relative block bg-white px-8 py-3 rounded-full font-bold text-sm text-slate-800 group-hover:bg-gray-50 transition-colors">
                 SỬ DỤNG DỊCH VỤ NGAY
               </span>
 
             </button>
-          </div>  
+          </Link>
+        </div>
         {/* Dashboard Image */}
         <div className="relative mx-auto max-w-5xl group">
           <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-300 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
           <div className="relative bg-white rounded-[2rem] p-2 shadow-2xl border border-white/50 overflow-hidden">
-            <img 
-              src="/images/dashboard-preview.png" 
+            <img
+              src="/images/dashboard-preview.png"
               alt="Dashboard"
               className="w-full h-auto rounded-[1.8rem]"
               onError={(e) => {
