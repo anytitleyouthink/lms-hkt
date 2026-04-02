@@ -24,7 +24,7 @@ export default function HomePage() {
         </p>
         {/* Rainbow Button */}
         <div className="flex justify-center mb-10">
-          <Link href="/main" className="relative p-[2px] rounded-full overflow-hidden group transition-transform active:scale-95 duration-200">
+          <Link href="/auth/login" className="relative p-[2px] rounded-full overflow-hidden group transition-transform active:scale-95 duration-200">
             <button className="relative p-[2px] rounded-full overflow-hidden group transition-transform active:scale-95 duration-200">
 
               {/* Hiệu ứng viền xoay */}

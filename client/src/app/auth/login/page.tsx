@@ -1,74 +1,64 @@
+"use client";
+
 import React from "react";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { LoginInput } from "@/components/ui/LoginInput";
 
 export default function LoginPage() {
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Xử lý logic đăng nhập ở đây
+  };
+
   return (
-    <div className="min-h-screen bg-white font-sans flex flex-col relative overflow-hidden">
-      
-      {/* 1. Header/Navbar thu nhỏ cho trang Login */}
-      <header className="w-full p-4 flex justify-center z-10">
-      </header>
+    <div className="min-h-screen bg-[#f4f7fe] font-sans flex flex-col">
 
-      {/* 2. Form Đăng nhập chính */}
-      <main className="flex-1 flex items-center justify-center p-6 z-10">
-        <div className="w-full max-w-[550px] bg-[#f0f4f8] rounded-[45px] p-12 shadow-[0_15px_40px_rgba(0,0,0,0.05)] border border-white/60">
-          
-          {/* Tiêu đề Form */}
-          <div className="text-center mb-12">
-            <h1 className="text-3xl font-black text-black mb-2">Đăng nhập</h1>
-            <p className="text-gray-500 font-semibold text-sm">Nhập tài khoản mà bạn được cấp</p>
+      <main className="flex-1 flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-[420px]">
+          {/* Title Section */}
+          <div className="mb-10">
+            <h1 className="text-4xl font-black text-[#2b3674] tracking-tight mb-3">Đăng nhập</h1>
+            <p className="text-[#a3aed0] font-bold text-sm ml-1">Nhập tài khoản và mật khẩu của bạn!</p>
           </div>
 
-          {/* Khu vực nhập liệu */}
-          <div className="space-y-10">
-            {/* Trường Tài khoản */}
-            <div className="flex items-center gap-6">
-              <label className="w-24 text-[16px] font-black text-black text-right whitespace-nowrap">
-                Tài khoản:
-              </label>
-              <div className="flex-1">
-                <input 
-                  type="text" 
-                  className="w-full h-14 px-8 rounded-full bg-gradient-to-b from-[#fdfdfe] to-[#e6e9ee] border border-gray-200 text-black shadow-inner focus:outline-none focus:ring-2 focus:ring-[#00b4db]/30 transition-all placeholder-gray-300"
-                  placeholder="..."
-                />
+          {/* Form Section */}
+          <form onSubmit={handleLogin} className="space-y-6">
+            <LoginInput
+              label="Tài khoản"
+              placeholder="mail@simmmple.com"
+              type="text"
+            />
+
+            <LoginInput
+              label="Mật khẩu"
+              placeholder="Min. 8 characters"
+              type="password"
+            />
+
+            <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="remember" className="w-4 h-4 rounded border-[#e0e5f2] accent-[#4318ff]" />
+                <label htmlFor="remember" className="text-xs font-bold text-[#2b3674] cursor-pointer">Ghi nhớ tôi</label>
               </div>
+              <a href="#" className="text-xs font-bold text-[#4318ff] hover:underline">Quên mật khẩu?</a>
             </div>
 
-            {/* Trường Mật khẩu */}
-            <div className="flex items-center gap-6">
-              <label className="w-24 text-[16px] font-black text-black text-right whitespace-nowrap">
-                Mật khẩu:
-              </label>
-              <div className="flex-1">
-                <input 
-                  type="password" 
-                  className="w-full h-14 px-8 rounded-full bg-gradient-to-b from-[#fdfdfe] to-[#e6e9ee] border border-gray-200 text-black shadow-inner focus:outline-none focus:ring-2 focus:ring-[#00b4db]/30 transition-all placeholder-gray-300"
-                  placeholder="..."
-                />
-              </div>
-            </div>
+            <button
+              type="submit"
+              className="w-full py-4 rounded-2xl bg-[#4318ff] text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-[#4318ff]/20 hover:bg-[#3311cc] transition-all active:scale-[0.98]"
+            >
+              Đăng nhập
+            </button>
+          </form>
 
-            {/* Nút Đăng nhập */}
-            <div className="flex justify-center pt-4">
-              <button className="px-12 py-3 rounded-full bg-gradient-to-r from-[#66ced6] to-[#46b8d2] text-white font-black text-sm shadow-[0_4px_15px_rgba(70,184,210,0.4)] hover:shadow-[0_6px_20px_rgba(70,184,210,0.6)] hover:scale-105 transition-all active:scale-95">
-                Đăng nhập
-              </button>
-            </div>
-          </div>
+          <p className="mt-8 text-center text-xs font-bold text-[#a3aed0]">
+            Chưa có tài khoản? <a href="#" className="text-[#4318ff] hover:underline">Liên hệ quản trị viên</a>
+          </p>
         </div>
       </main>
 
-      {/* 3. Footer LMS PRIVATE */}
-      <footer className="p-10 z-10">
-        <span className="text-[10px] font-black text-gray-400 tracking-[0.3em] uppercase opacity-70">
-          LMS PRIVATE
-        </span>
+      <footer className="p-10 text-[10px] font-black text-[#a3aed0] tracking-[0.3em] uppercase">
+        © 2026 ACADEMIC KINSHIP
       </footer>
-
-      {/* Background Decor (Lớp trang trí mờ phía sau nếu cần) */}
-      <div className="absolute top-[-10%] left-[-5%] w-64 h-64 bg-cyan-50 rounded-full blur-[100px] -z-0"></div>
     </div>
   );
 }
