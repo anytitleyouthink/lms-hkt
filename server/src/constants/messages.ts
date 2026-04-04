@@ -12,6 +12,7 @@ export const userMessages = {
   NAME_INVALID: 'Name must be 6–100 characters',
   ROLE_INVALID: 'Role invalid',
   ROLE_NOT_FOUND: 'Role not found',
+  GET_EMPLOYEE_DASHBOARD_SUCCESS: 'Get employee dashboard success',
   ROLE_REQUIRED: 'Role is required',
   USER_EXISTS: 'User already exists',
   CHECK_ROLE_PERMISSION_ERROR: 'You do not have permission to access this resource',
@@ -93,6 +94,8 @@ export const courseMessages = {
   COURSE_CREATED_SUCCESS: 'Course created successfully',
   COURSE_NOT_FOUND: 'Course not found',
   COURSE_ID_INVALID: 'Course ID is invalid',
+  GET_COURSE_DETAIL_SUCCESS: 'Get course detail successfully',
+   ERROR_SERVER: 'Server error',
     COURSE_TITLE_REQUIRED :'Course title required  ',
   COURSE_TITLE_TOO_SHORT: 'Course title must be at least 5 characters',
   COURSE_DESCRIPTION_TOO_SHORT: 'Course description must be at least 10 characters',
@@ -105,6 +108,7 @@ export const courseMessages = {
   SECTION_CREATED_SUCCESS: 'Section created successfully',
   GET_SECTIONS_SUCCESS: 'Get sections successfully',
   SECTION_ID_INVALID: 'Section ID is invalid',
+  SECTION_DELETED_SUCCESS: 'Section deleted successfully',
   SECTION_NOT_FOUND: 'Section not found',
   LESSON_TITLE_TOO_SHORT: 'Lesson title must be at least 2 characters',
   LESSON_CREATED_SUCCESS: 'Lesson created successfully',
@@ -146,6 +150,7 @@ export const enrollmentMessages = {
   ENROLLMENT_CREATED_SUCCESS: 'Enrollment created successfully',
   ENROLLMENT_NOT_FOUND: 'Enrollment not found', 
   ERROR_SERVER: 'Server error',
+  COURSE_NOT_FOUND: 'Course not found',
   PENDING_ENROLLMENTS_FETCHED: 'Pending enrollments fetched successfully',
   ENROLLMENT_NOT_APPROVED: 'Enrollment not approved',
   ENROLLMENT_ID_INVALID: 'Enrollment ID is invalid',
@@ -163,11 +168,16 @@ export const certificateMessages = {
   ISSUE_SUCCESS: 'Certificate issued successfully',
   GET_SUCCESS: 'Certificates retrieved successfully',
   COURSE_ID_INVALID: 'Course ID is invalid',
+  INVALID_CERT_CODE: 'Invalid certificate code',
 } as const;
 
 export const progressMessages = {
   COURSE_NOT_FOUND: 'Course not found',
+  SECTION_NOT_FOUND: 'Section not found',
   LESSON_NOT_FOUND: 'Lesson not found',
   COMPLETE_SUCCESS: 'Lesson completed successfully',
-  GET_SUCCESS: 'Progress retrieved successfully'
+  GET_SUCCESS: 'Progress retrieved successfully',
+  INVALID_SECTION_ID: 'Invalid section ID',
+  INVALID_LESSON_ID: 'Invalid lesson ID',
+  SECTION_OR_COURSE_NOT_FOUND: 'Section or Course not found',
 } as const;

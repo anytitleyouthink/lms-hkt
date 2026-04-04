@@ -24,6 +24,8 @@ import {
   TokenPayload,
 } from "~/models/requests/User.requests"; 
 import { UserType } from "~/models/schemas/User.schema";
+import progressServices from "~/services/progress.services";
+import databaseService from "~/services/database.services";
 
 
 export const getMeController = async (req: Request, res: Response) => {
@@ -85,17 +87,119 @@ return res.status(StatusCodes.CREATED).json({
 
 
 
-    
-
-
-
-
-
 export const getUsersController = async (req: Request, res: Response) => {
-  const { email } = req.query;
-  const result = await usersService.getUsers(email as string);
+  const { email, search } = req.query;
+  const result = await usersService.getUsers((search || email) as string);
   return res.json({
     message: userMessages.GET_PROFILE_SUCCESS, // Reused message for simplicity
     result
   });
 };
+
+export const toggleUserStatusController = async (req: Request, res: Response) => {
+  const { user_id } = req.params;
+  const result = await usersService.toggleStatus(user_id);
+  return res.json({
+    message: "User status updated successfully",
+    result
+  });
+};
+// users.controllers.ts (Hoặc file controller của Dashboard)
+
+export const getEmployeeDashboardController = async (req: Request, res: Response) => {
+  const { user_id } = (req as any).decoded_access_token;
+
+    // 1. Lấy thông tin User để hiện lên Header
+    const userProfile = await databaseService.users.findOne(
+      { _id: new ObjectId(user_id) },
+      { projection: { password: 0, refresh_token: 0 ,forgot_password_token: 0} }
+    );
+
+    // 2. Tìm 3 khóa học GẦN NHẤT mà user này đã đăng ký
+    const recentEnrollments = await databaseService.enrollments
+      .find({ user_id: new ObjectId(user_id) })
+      .sort({ created_at: -1 }) // Xếp mới nhất lên đầu
+      .limit(3)
+      .toArray();
+    const recentCoursesWithProgress = await Promise.all(
+      recentEnrollments.map(async (enrollment) => {
+        const courseIdStr = enrollment.course_id.toString();
+
+    
+        const courseDetail = await databaseService.courses.findOne(
+          { _id: enrollment.course_id },
+          { projection: { title: 1, thumbnail: 1 } } // Chỉ lấy những gì Dashboard cần cho nhẹ
+        );
+
+        const progressData = await progressServices.getCourseProgress(user_id, courseIdStr);
+
+        return {
+          course_info: courseDetail,
+          progress_detail: progressData 
+        };
+      })
+    );
+
+    return res.json({
+      message: userMessages.GET_EMPLOYEE_DASHBOARD_SUCCESS,
+      result: {
+        profile: userProfile,
+        recent_learning: recentCoursesWithProgress
+      }
+    });
+};
+export const getTrainerDashboardController = async (req: Request, res: Response) => {
+  const { user_id } = (req as any).decoded_access_token
+
+  
+  const profile = await databaseService.users.findOne(
+    { _id: new ObjectId(user_id) },
+    { projection: { password: 0, refresh_token: 0, forgot_password_token: 0} }
+  )
+
+  const coursesWithStudentCount = await databaseService.courses.aggregate([
+    { $match: { trainer_id: new ObjectId(user_id), status: { $ne: 'deleted' } } },
+    
+    {
+      $lookup: {
+        from: 'enrollments',
+        localField: '_id',
+        foreignField: 'course_id',
+        as: 'students'
+      }
+    },
+
+    // Thêm một trường mới là total_students bằng độ dài của mảng students vừa join
+    {
+      $addFields: {
+        total_students: { $size: '$students' }
+      }
+    },
+
+    {
+      $project: {
+        title: 1,
+        thumbnail: 1,
+        total_students: 1,
+        created_at: 1,
+        status: 1
+      }
+    },
+    { $sort: { created_at: -1 } }
+  ]).toArray()
+
+  // 3. Tính toán nhanh các con số thống kê tổng quát (Số khóa, Tổng học viên)
+  const stats = {
+    total_courses: coursesWithStudentCount.length,
+    total_all_students: coursesWithStudentCount.reduce((sum, course) => sum + course.total_students, 0)
+  }
+
+  return res.json({
+    message: "Trainer dashboard data fetched successfully",
+    result: {
+      profile,
+      stats,
+      courses: coursesWithStudentCount
+    }
+  })
+}

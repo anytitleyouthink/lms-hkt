@@ -5,7 +5,7 @@ import progressServices from '~/services/progress.services'
 import databaseService from '~/services/database.services'
 import { ObjectId } from 'mongodb'
 import { ErrorResponse } from '~/models/Errors'
-import { certificateMessages, userMessages } from '~/constants/messages'
+import { certificateMessages, enrollmentMessages, userMessages } from '~/constants/messages'
 
 export const checkEligibleForCertificateMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -36,7 +36,7 @@ export const checkCourseExistMiddleware = async (req: Request, res: Response, ne
     const course = await databaseService.courses.findOne({ _id: new ObjectId(course_id) })
 
     if (!course) {
-      return next(new ErrorResponse(userMessages.VALIDATION_ERROR, StatusCodes.NOT_FOUND)) // or courseMessages.COURSE_NOT_FOUND
+      return next(new ErrorResponse(enrollmentMessages.COURSE_NOT_FOUND, StatusCodes.NOT_FOUND)) // or courseMessages.COURSE_NOT_FOUND
     }
 
     next()

@@ -5,25 +5,12 @@ import { generateCertificateHTML } from '~/utils/certificateTemplate'
 import { EnrollmentStatus } from '~/constants/enums'
 import { ErrorResponse } from '~/models/Errors'
 import { StatusCodes } from 'http-status-codes'
-import { enrollmentMessages, userMessages } from '~/constants/messages'
+import { enrollmentMessages, userMessages, certificateMessages } from '~/constants/messages'
 
 class CertificatesService {
   async issueCertificate(user_id: string, course_id: string) {
     const userObjId = new ObjectId(user_id)
     const courseObjId = new ObjectId(course_id)
-
-    // Verify enrollment
-    const enrollment = await databaseService.enrollments.findOne({
-      user_id: userObjId,
-      course_id: courseObjId,
-      status: EnrollmentStatus.Approved
-    })
-
-    if (!enrollment) {
-      throw new ErrorResponse(enrollmentMessages.ENROLLMENT_NOT_APPROVED, StatusCodes.FORBIDDEN)
-    }
-
-    // Check if certificate already exists
     const existingCert = await databaseService.certificates.findOne({
       user_id: userObjId,
       course_id: courseObjId
@@ -54,7 +41,7 @@ class CertificatesService {
       studentName,
       courseName,
       issueDate,
-      certificateId.toString()
+      cert_code
     )
 
     const certificate = new Certificate({
@@ -100,6 +87,23 @@ class CertificatesService {
         }
       ])
       .toArray()
+  }
+
+  async verifyCertificate(cert_code: string) {
+    const certificate = await databaseService.certificates.findOne({ cert_code })
+    if (!certificate) {
+      throw new ErrorResponse(certificateMessages.INVALID_CERT_CODE || 'Mã chứng chỉ không hợp lệ', StatusCodes.NOT_FOUND)
+    }
+    const [user, course] = await Promise.all([
+      databaseService.users.findOne({ _id: certificate.user_id }, { projection: { name: 1, email: 1 } }),
+      databaseService.courses.findOne({ _id: certificate.course_id }, { projection: { title: 1 } })
+    ])
+
+    return {
+      ...certificate,
+      student_name: user?.name,
+      course_name: course?.title
+    }
   }
 }
 

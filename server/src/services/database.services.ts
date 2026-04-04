@@ -99,7 +99,6 @@ class DatabaseService {
       this.indexCertificates(),
       this.indexUserProgresses()
     ]);
-    console.log(" All indexes created successfully");
   }
 
 

@@ -18,7 +18,7 @@ import {
 import {
   LogoutReqBody,
   TokenPayload,
-} from "~/models/requests/User.requests"; 
+} from "~/models/requests/User.requests";
 import { UserType } from "~/models/schemas/User.schema";
 import databaseService from "~/services/database.services";
 
@@ -55,7 +55,7 @@ export const logoutController = async (req: Request<ParamsDictionary, any, Logou
   await usersService.logout(user_id);
   res.clearCookie('refresh_token', {
     path: '/auth'
-  }); 
+  });
 
   return res.status(StatusCodes.OK).json({
     message: userMessages.LOGOUT_SUCCESS
@@ -102,9 +102,9 @@ export const refreshTokenController = async (
     access_token: result.new_access_token
   })
 }
-export const forgotPasswordController = async (req: Request<ParamsDictionary, any,ForgotPasswordReqBody>, res: Response) => {
+export const forgotPasswordController = async (req: Request<ParamsDictionary, any, ForgotPasswordReqBody>, res: Response) => {
   const user = req.user as UserType;
-  const result = await usersService.forgotPassword({user_id: new ObjectId(user._id), isFirstLogin: user.isFirstLogin as boolean, role: user.role as UserRole, email: user.email});
+  const result = await usersService.forgotPassword({ user_id: new ObjectId(user._id), isFirstLogin: user.isFirstLogin as boolean, role: user.role as UserRole, email: user.email });
   return res.status(StatusCodes.OK).json({
     message: userMessages.FORGOT_PASSWORD_EMAIL_SENT,
   });
@@ -114,10 +114,10 @@ export const verifyForgotPasswordController = async (req: Request<ParamsDictiona
     message: userMessages.VERIFY_FORGOT_PASSWORD_SUCCESS,
   });
 };
-export const resetPasswordController = async ( req: Request<ParamsDictionary, any, ResetPasswordReqBody>, res: Response) => {
- const { user_id } = req.decoded_forgot_password_token as TokenPayload
-  const {password} = req.body;
-  const result = await usersService.resetPassword({user_id,password});
+export const resetPasswordController = async (req: Request<ParamsDictionary, any, ResetPasswordReqBody>, res: Response) => {
+  const { user_id } = req.decoded_forgot_password_token as TokenPayload
+  const { password } = req.body;
+  const result = await usersService.resetPassword({ user_id, password });
   return res.status(StatusCodes.OK).json({
     message: userMessages.USER_UPDATED_SUCCESS,
   });

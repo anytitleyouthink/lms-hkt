@@ -4,7 +4,7 @@ import UserProgress from '~/models/schemas/UserProgress.schema'
 import certificatesService from './certificates.services'
 
 class ProgressServices {
-  async completeLesson(user_id: string, course_id: string, lesson_id: string) {
+  async completeLesson(user_id: string, lesson_id: string, course_id: string) {
     const userObjId = new ObjectId(user_id)
     const courseObjId = new ObjectId(course_id)
     const lessonObjId = new ObjectId(lesson_id)
@@ -13,8 +13,8 @@ class ProgressServices {
     await databaseService.userProgresses.updateOne(
       {
         user_id: userObjId,
-        course_id: courseObjId,
-        lesson_id: lessonObjId
+        lesson_id: lessonObjId,
+        course_id: courseObjId
       },
       {
         $setOnInsert: new UserProgress({

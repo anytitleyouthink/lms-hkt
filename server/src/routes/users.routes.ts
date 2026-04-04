@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getMeController, updateMeController, getProfileController, changePasswordController } from "~/controllers/users.controllers";
-import { accessTokenValidationMiddleware, updateMeValidator, changePasswordValidator } from "~/middlewares/users.middleware";
+import { getMeController, updateMeController, getProfileController, changePasswordController, getEmployeeDashboardController, getTrainerDashboardController } from "~/controllers/users.controllers";
+import { accessTokenValidationMiddleware, updateMeValidator, changePasswordValidator, checkRoleMiddleware } from "~/middlewares/users.middleware";
 import { filterMiddleware } from "~/middlewares/common.middleware";
 import { UpdateMeReqBody } from "~/validations/users.validation";
 import { wrapAsync } from "~/utils/handlers";
+import { UserRole } from "~/constants/enums";
 
 const userRouter = Router();
 
@@ -50,5 +51,22 @@ userRouter.put('/change-password', changePasswordValidator, wrapAsync(changePass
  * Return: { message: string, result: UserProfile }
  */
 userRouter.get('/:username', wrapAsync(getProfileController));
-
+/**
+ * Lấy dữ liệu tổng hợp cho trang Dashboard của Employee
+ * Path: /users/dashboard/summary
+ * Method: GET
+ * Headers: { Authorization: "Bearer <access_token>" }
+ */
+userRouter.get(
+  '/dashboard/summary',
+  accessTokenValidationMiddleware, 
+  getEmployeeDashboardController   
+);
+// Path: /users/trainer/dashboard
+userRouter.get(
+  '/trainer/dashboard',
+  accessTokenValidationMiddleware,
+  checkRoleMiddleware([UserRole.Trainer, UserRole.Admin]), // Chỉ Trainer và Admin mới có quyền xem dashboard này
+  wrapAsync(getTrainerDashboardController) 
+)
 export default userRouter;

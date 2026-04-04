@@ -24,13 +24,10 @@ class SectionsService {
   }
 
   // Tiện tay làm luôn hàm lấy danh sách chương của 1 khóa học
-  async getSectionsByCourseId(course_id: string) {
-    return await databaseService.sections
-      .find({ course_id: new ObjectId(course_id) })
-      .sort({ order: 1 }) // Sắp xếp theo thứ tự 1, 2, 3...
-      .toArray()
-  }
+ 
+  
 }
+
 
 const sectionsService = new SectionsService()
 export default sectionsService

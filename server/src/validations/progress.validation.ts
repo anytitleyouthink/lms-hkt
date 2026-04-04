@@ -1,3 +1,4 @@
+import { c } from '@faker-js/faker/dist/airline-Dz1uGqgJ';
 import { z } from 'zod';
 
 export const completeLessonSchema = z.object({

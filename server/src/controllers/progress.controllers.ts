@@ -15,7 +15,7 @@ export const completeLessonController = async (req: Request, res: Response, next
        return next(new ErrorResponse(userMessages.ACCESS_TOKEN_REQUIRED, StatusCodes.UNAUTHORIZED))
     }
 
-    const result = await progressServices.completeLesson(user_id, course_id, lesson_id)
+    const result = await progressServices.completeLesson(user_id, lesson_id, course_id)
 
     return res.status(StatusCodes.OK).json({
       message: progressMessages.COMPLETE_SUCCESS,

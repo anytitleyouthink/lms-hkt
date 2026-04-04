@@ -37,8 +37,11 @@ export const loginValidator = [
       return next(new ErrorResponse(userMessages.EMAIL_OR_PASSWORD_INVALID, StatusCodes.UNAUTHORIZED));
     }
     if (user.status === UserStatus.Banned) {
-  return next(new ErrorResponse(userMessages.USER_BANNED, StatusCodes.FORBIDDEN));
-}
+      return next(new ErrorResponse(userMessages.USER_BANNED, StatusCodes.FORBIDDEN));
+    }
+    if (user.status === UserStatus.InActive) {
+      return next(new ErrorResponse("Account is inactive. Please contact support.", StatusCodes.FORBIDDEN));
+    }
     
     req.user = user; 
     next();

@@ -8,11 +8,10 @@ import { EnrollmentStatus } from '~/constants/enums';
 import { enrollmentMessages, messageMessages } from '~/constants/messages';
 
 export const setupChatSocket = (io: Server) => {
-  // 1. Kiểm tra Token
   io.use(async (socket, next) => {
     try {
       const token = socket.handshake.auth.token || socket.handshake.headers['authorization'];
-      if (!token) return next(new Error('Chưa cung cấp token'));
+      if (!token) return next(new Error('token invalid'));
       
       const actualToken = token.startsWith('Bearer ') ? token.split(' ')[1] : token;
       const privateKey = process.env.JWT_PRIVATE_ACCESS_TOKEN as string;
@@ -28,7 +27,7 @@ export const setupChatSocket = (io: Server) => {
   io.on('connection', (socket: Socket) => {
     const user = (socket as any).data.user;
 
-    // 2. Chui vào phòng chat
+   
     socket.on('join_course', async (course_id: string) => {
   
       const isEnrolled = await databaseService.enrollments.findOne({

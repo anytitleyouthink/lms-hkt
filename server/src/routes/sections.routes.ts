@@ -1,8 +1,9 @@
 import { Router } from 'express'
-import { createSectionController, getSectionsController } from '~/controllers/sections.controllers'
+import { createSectionController, deleteSectionController } from '~/controllers/sections.controllers'
 import { accessTokenValidationMiddleware, checkRoleMiddleware } from '~/middlewares/users.middleware'
 import { UserRole } from '~/constants/enums'
 import { wrapAsync } from '~/utils/handlers'
+import { checkEnrollmentExistMiddleware } from '~/middlewares/enrollments.middlewares'
 
 const sectionsRouter = Router()
 
@@ -20,19 +21,20 @@ sectionsRouter.post(
   // checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
   wrapAsync(createSectionController)
 )
-
 /**
- * Description: Lấy danh sách các chương của 1 khóa học bằng Course ID
- * Path: /sections/course/:course_id
- * Method: GET
+ * Description: xóa một chương học (Section) và tất cả bài học (Lesson) bên trong nó
+ * Path: /sections/sections/:section_id
+ * Method: DELETE
  * Header: { Authorization: Bearer <access_token> }
- * Body: Không yêu cầu
+ * Body: Course ID (để biết xóa chương nào)
  * Return: { message: string, result: Array<Section> }
  */
-sectionsRouter.get(
-  '/course/:course_id',
+sectionsRouter.delete(
+  '/sections/:section_id',
   accessTokenValidationMiddleware,
-  wrapAsync(getSectionsController)
-)
+  checkEnrollmentExistMiddleware,
+  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
+  wrapAsync(deleteSectionController)
+);
 
 export default sectionsRouter

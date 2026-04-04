@@ -45,3 +45,17 @@ export const getUserCertificatesController = async (req: Request, res: Response,
     next(new ErrorResponse(error.message || 'Failed to retrieve certificates', StatusCodes.BAD_REQUEST))
   }
 }
+
+export const verifyCertificateController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { cert_code } = req.params
+    const result = await certificatesService.verifyCertificate(cert_code)
+
+    return res.status(StatusCodes.OK).json({
+      message: "Certificate verified successfully",
+      result
+    })
+  } catch (error: any) {
+    next(new ErrorResponse(error.message || 'Verification failed', StatusCodes.NOT_FOUND))
+  }
+}

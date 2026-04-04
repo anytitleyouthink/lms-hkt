@@ -28,7 +28,7 @@ const imageSchema = z.string()
   .max(400, userMessages.IMAGE_URL_LENGTH)
   .trim()
   .optional();
-const phoneSchema =  z.string().regex(REGEX_PHONE, userMessages.PHONE_INVALID).optional();
+const phoneSchema = z.string().regex(REGEX_PHONE, userMessages.PHONE_INVALID).optional();
 // Chỉ check format ObjectId, không check DB
 const objectIdSchema = z.string()
   .refine((val) => ObjectId.isValid(val), userMessages.INVALID_USER_ID);
@@ -47,7 +47,7 @@ export type LoginReqBody = z.infer<typeof loginSchema>['body'];
 export const firstLoginSchema = z.object({
   body: z.object({
     name: nameSchema,
-    phone:phoneSchema,
+    phone: phoneSchema,
     dateOfBirth: dateOfBirthSchema,
     newPassword: z.string()
       .min(6, userMessages.PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50)
@@ -56,7 +56,7 @@ export const firstLoginSchema = z.object({
       .min(1, userMessages.CONFIRM_PASSWORD_REQUIRED)
   }).refine((data) => data.newPassword === data.confirmPassword, {
     message: userMessages.CONFIRM_PASSWORD_NOT_MATCH,
-    path: ["confirmPassword"] 
+    path: ["confirmPassword"]
   })
 });
 export type FirstLoginReqBody = z.infer<typeof firstLoginSchema>['body'];
@@ -81,7 +81,7 @@ export type UpdateMeReqBody = z.infer<typeof updateMeSchema>['body'];
 // --- CHANGE PASSWORD SCHEMA ---
 export const changePasswordSchema = z.object({
   body: z.object({
-    old_password: z.string().min(1, userMessages.PASSWORD_REQUIRED), 
+    old_password: z.string().min(1, userMessages.PASSWORD_REQUIRED),
     password: passwordSchema,
     confirm_password: confirmPasswordSchema
   })
@@ -117,8 +117,8 @@ export const createUserByAdminSchema = z.object({
     name: z.string().trim().min(3, userMessages.NAME_LENGTH_MUST_BE_FROM_3_TO_100).max(100, userMessages.NAME_LENGTH_MUST_BE_FROM_3_TO_100),
     email: z.string().trim().email(userMessages.EMAIL_INVALID),
     role: z.nativeEnum(UserRole, {
-    message: userMessages.ROLE_INVALID
-})
+      message: userMessages.ROLE_INVALID
+    })
   })
 })
 export type CreateUserByAdminReqBody = z.infer<typeof createUserByAdminSchema>['body'];
@@ -131,6 +131,6 @@ export const createMultipleUsersSchema = z.object({
         message: userMessages.ROLE_INVALID
       })
     })
-  ).min(1, userMessages.CREATE_MULTIPLE_USERS_MIN) 
+  ).min(1, userMessages.CREATE_MULTIPLE_USERS_MIN)
 })
 export type CreateMultipleUsersReqBody = z.infer<typeof createMultipleUsersSchema>['body'];

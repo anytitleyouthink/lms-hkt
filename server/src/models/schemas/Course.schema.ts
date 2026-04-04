@@ -10,6 +10,7 @@ interface CourseType {
   status?: CourseStatus
   created_at?: Date
   updated_at?: Date
+  deleted_at?: Date | null
 }
 
 export default class Course {
@@ -21,6 +22,7 @@ export default class Course {
   status: CourseStatus
   created_at: Date
   updated_at: Date
+  deleted_at: Date | null
 
   constructor(course: CourseType) {
     this._id = course._id || new ObjectId()
@@ -31,5 +33,6 @@ export default class Course {
     this.status = course.status !== undefined ? course.status : CourseStatus.Draft
     this.created_at = course.created_at || new Date()
     this.updated_at = course.updated_at || new Date()
+    this.deleted_at = course.deleted_at || null
   }
 }

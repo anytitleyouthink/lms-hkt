@@ -7,6 +7,8 @@ import { UserRole } from '~/constants/enums'
 import { wrapAsync } from '~/utils/handlers'
 import { validate } from '~/utils/validation'
 import { sectionIdValidator } from '~/middlewares/sections.middlewares'
+import { deleteSectionController } from '~/controllers/sections.controllers'
+import { checkEnrollmentExistMiddleware } from '~/middlewares/enrollments.middlewares'
 const lessonsRouter = Router()
 /**
  * Description: Tạo mới một bài học (Lesson) trong một Section

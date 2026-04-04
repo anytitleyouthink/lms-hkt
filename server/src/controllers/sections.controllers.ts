@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
-import { courseMessages } from '~/constants/messages'
+import { ObjectId } from 'mongodb'
+import { courseMessages, progressMessages } from '~/constants/messages'
+import databaseService from '~/services/database.services'
 import sectionsService from '~/services/sections.services'
 import { CreateSectionReqBody } from '~/validations/sections.validation'
 
@@ -14,11 +16,45 @@ export const createSectionController = async (
   })
 }
 
-export const getSectionsController = async (req: Request, res: Response) => {
-  const { course_id } = req.params
-  const result = await sectionsService.getSectionsByCourseId(course_id)
-  return res.json({
-    message: courseMessages.GET_SECTIONS_SUCCESS,
-    result
-  })
-}
+
+export const deleteSectionController = async (req: Request, res: Response) => {
+  const { section_id } = req.params;
+
+  try {
+    // 1. Tìm Section để lấy thông tin order và course_id
+    const section = await databaseService.sections.findOne({ 
+      _id: new ObjectId(section_id) 
+    });
+    
+    if (!section) {
+      return res.status(404).json({ message: progressMessages.SECTION_NOT_FOUND   });
+    }
+
+    const deletedOrder = section.order;
+    const courseId = section.course_id;
+
+    // 2. DỌN RÁC (Quan trọng): Xóa TẤT CẢ Lesson thuộc về Section này
+    await databaseService.lessons.deleteMany({ 
+      section_id: new ObjectId(section_id) 
+    });
+
+    // 3. Xóa chính Section đó
+    await databaseService.sections.deleteOne({ _id: new ObjectId(section_id) });
+
+    // 4. RE-INDEXING: Cập nhật lại các Section đứng sau trong cùng khóa học
+    await databaseService.sections.updateMany(
+      { 
+        course_id: new ObjectId(courseId), 
+        order: { $gt: deletedOrder } 
+      },
+      { 
+        $inc: { order: -1 } 
+      } 
+    );
+
+    return res.json({ message: courseMessages.SECTION_DELETED_SUCCESS });
+  } catch (error) {
+    console.error("Error in deleteSectionController:", error);
+    return res.status(500).json({ message: courseMessages.ERROR_SERVER   });
+  }
+};

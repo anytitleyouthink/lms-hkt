@@ -11,12 +11,14 @@ export enum UserRole {
 }
 export enum UserStatus {
   Active,  
-  Banned,  
+  Banned,
+  InActive
 }
 export enum CourseStatus {
   Draft,     
   Published, 
-  Archived   
+  Archived,
+  Deleted
 }
 export enum LessonType {
   Video,    

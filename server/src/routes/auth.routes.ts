@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { 
-    loginController, logoutController, refreshTokenController, 
-    forgotPasswordController, verifyForgotPasswordController, resetPasswordController 
+import {
+    loginController, logoutController, refreshTokenController,
+    forgotPasswordController, verifyForgotPasswordController, resetPasswordController
 } from "~/controllers/auth.controllers";
-import { 
+import {
     loginValidator, forgotPasswordValidator, resetPasswordValidator,
-    refreshTokenValidationMiddleware, verifyForgotPasswordTokenValidator 
+    refreshTokenValidationMiddleware, verifyForgotPasswordTokenValidator
 } from "~/middlewares/users.middleware";
 import { wrapAsync } from "~/utils/handlers";
 

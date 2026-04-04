@@ -1,3 +1,4 @@
+import { c } from '@faker-js/faker/dist/airline-Dz1uGqgJ'
 import { Request, Response } from 'express'
 import { courseMessages } from '~/constants/messages'
 import coursesService from '~/services/courses.services'
@@ -49,6 +50,33 @@ export const updateCourseController = async (
 
   return res.json({
     message: courseMessages.COURSE_UPDATED_SUCCESS,
+    result
+  })
+}
+export const getCourseDetailController = async (req: Request, res: Response) => {
+  const { course_id } = req.body;
+
+    const courseDetail = await coursesService.getCourseDetail(course_id);
+
+    // Nếu mảng rỗng tức là không tìm thấy
+    if (courseDetail.length === 0) {
+      return res.status(404).json({ message: courseMessages.COURSE_NOT_FOUND });
+    }
+
+    return res.json({
+      message: courseMessages.GET_COURSE_DETAIL_SUCCESS,
+      result: courseDetail[0] // Chỉ lấy object đầu tiên vì tìm theo ID là duy nhất
+    });
+
+  
+};
+
+export const deleteCourseController = async (req: Request<CourseIdParams>, res: Response) => {
+  const { course_id } = req.params
+  const result = await coursesService.deleteCourse(course_id)
+
+  return res.json({
+    message: "Course soft deleted successfully",
     result
   })
 }

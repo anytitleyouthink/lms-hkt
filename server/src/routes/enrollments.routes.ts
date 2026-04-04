@@ -1,12 +1,13 @@
 import { c } from '@faker-js/faker/dist/airline-Dz1uGqgJ'
 import { Router } from 'express'
 import { UserRole } from '~/constants/enums'
-import { approveEnrollmentController, getPendingEnrollmentsController, requestEnrollmentController } from '~/controllers/enrollments.controllers'
+import { approveEnrollmentController, getEnrollmentRequestsByCourseController, getPendingEnrollmentsController, requestEnrollmentController } from '~/controllers/enrollments.controllers'
 import { enrollValidator } from '~/middlewares/enrollments.middlewares'
 
 
 
 import { accessTokenValidationMiddleware, checkRoleMiddleware } from '~/middlewares/users.middleware'
+import { wrapAsync } from '~/utils/handlers'
 
 const enrollmentsRouter = Router()
 
@@ -34,10 +35,10 @@ enrollmentsRouter.post(
  * Body: Không yêu cầu
  * Return: { message: string, result: Array<Enrollment> }
  */
-enrollmentsRouter.get('/pending', 
+enrollmentsRouter.get('/:course_id/requests/pending', 
   accessTokenValidationMiddleware, 
   checkRoleMiddleware([UserRole.Trainer, UserRole.Admin]),
-   getPendingEnrollmentsController)
+   wrapAsync(getPendingEnrollmentsController))
 
 /**
  * Description: Cập nhật trạng thái duyệt/từ chối yêu cầu đăng ký
@@ -51,7 +52,14 @@ enrollmentsRouter.patch(
   '/:enrollment_id/approve',
   accessTokenValidationMiddleware,
    checkRoleMiddleware([UserRole.Trainer, UserRole.Admin]), 
-  approveEnrollmentController
+  wrapAsync(approveEnrollmentController)
+)
+// Path: /enrollments/:course_id/requests
+enrollmentsRouter.get(
+  '/:course_id/requests',
+  accessTokenValidationMiddleware,
+  checkRoleMiddleware([UserRole.Trainer, UserRole.Admin]),
+  wrapAsync(getEnrollmentRequestsByCourseController)
 )
 
 export default enrollmentsRouter
