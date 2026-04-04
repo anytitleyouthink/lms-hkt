@@ -39,7 +39,6 @@ export default function LoginPage() {
                 <input type="checkbox" id="remember" className="w-4 h-4 rounded border-[#e0e5f2] accent-[#4318ff]" />
                 <label htmlFor="remember" className="text-xs font-bold text-[#2b3674] cursor-pointer">Ghi nhớ tôi</label>
               </div>
-              <a href="#" className="text-xs font-bold text-[#4318ff] hover:underline">Quên mật khẩu?</a>
             </div>
 
             <button
