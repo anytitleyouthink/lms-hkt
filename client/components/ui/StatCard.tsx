@@ -1,31 +1,24 @@
 import React from 'react';
 
 interface StatCardProps {
-  type: "numeric" | "action";
-  icon?: React.ReactNode;
-  value?: string | number;
+  icon: React.ReactNode;
+  value: string | number;
   label: string;
-  iconColor?: string;
   subtext?: string;
-  description?: string;
-  btnText?: string;
+  color?: string;
 }
 
-export default function StatCard({ icon, value, label, iconColor = '', subtext, description, btnText }: StatCardProps) {
+export default function StatCard({ icon, value, label, subtext, color = "bg-blue-50" }: StatCardProps) {
   return (
-    <div className="bg-[#f4f7fe] p-5 rounded-2xl flex flex-col gap-3 flex-1 min-w-[200px] hover:shadow-sm transition-shadow">
-      <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-full bg-white shadow-sm flex items-center justify-center ${iconColor}`}>
-          {icon || <span className="text-slate-400">•</span>}
-        </div>
-        <div>
-          <div className="text-xl font-black text-[#2b3674]">{value ?? '-'}</div>
-          <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{label}</div>
-        </div>
+    <div className="bg-white p-6 rounded-[32px] shadow-sm border border-slate-50 flex items-center gap-5 flex-1 min-w-[200px]">
+      <div className={`w-14 h-14 rounded-2xl ${color} flex items-center justify-center shrink-0 text-blue-600`}>
+        {React.cloneElement(icon as React.ReactElement, { size: 24 } as any)}
       </div>
-      {subtext && <p className="text-xs text-gray-500">{subtext}</p>}
-      {description && <p className="text-xs text-gray-500">{description}</p>}
-      {btnText && <button className="mt-2 px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition">{btnText}</button>}
+      <div>
+        <h3 className="text-2xl font-black text-[#1b2559]">{value}</h3>
+        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{label}</p>
+        {subtext && <p className="text-[10px] text-slate-400 mt-1">{subtext}</p>}
+      </div>
     </div>
   );
 }
