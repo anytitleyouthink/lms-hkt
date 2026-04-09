@@ -13,8 +13,10 @@ import quizzesRouter from "./quizzes.routes";
 import messagesRoutes from "./messages.routes";
 import { en } from "@faker-js/faker/.";
 import enrollmentsRouter from "./enrollments.routes";
+import notificationsRouter from "./notifications.routes";
 import certificatesRouter from "./certificates.routes";
 import progressRouter from "./progress.routes";
+import loungeChatRouter from "./loungeChat.routes";
 
 const rootRouter = Router();
 rootRouter.use('/auth', authRouter)
@@ -26,25 +28,26 @@ rootRouter.use('/users',
 // 3. Nhóm Admin (địa chỉ sẽ là /admin/create-by-admin)
 // Gắn luôn Middleware check Admin ở đây để bảo vệ toàn bộ nhóm này
 rootRouter.use('/admin', 
-  // accessTokenValidationMiddleware, 
-  // checkRoleMiddleware([UserRole.Admin]), 
+  accessTokenValidationMiddleware, 
+  checkRoleMiddleware([UserRole.Admin]), 
   adminRouter)
 rootRouter.use('/courses', coursesRouter)
 rootRouter.use('/sections', sectionsRouter)
 rootRouter.use('/lessons', lessonsRouter)
 rootRouter.use('/medias',
-  //  accessTokenValidationMiddleware, 
-  //  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
+   accessTokenValidationMiddleware, 
+   checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
   mediasRouter)
   rootRouter.use('/quizzes',
-  //  accessTokenValidationMiddleware, 
-  //  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
-  quizzesRouter
+   accessTokenValidationMiddleware, 
+   quizzesRouter
   )
 rootRouter.use('/messages', messagesRoutes);
 rootRouter.use('/enrollments', enrollmentsRouter);
+rootRouter.use('/notifications', notificationsRouter);
 rootRouter.use('/certificates', certificatesRouter);
 rootRouter.use('/progress', progressRouter);
+rootRouter.use('/lounge', loungeChatRouter);
 
 
 

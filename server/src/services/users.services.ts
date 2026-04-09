@@ -18,7 +18,7 @@ import axios from "axios";
 class UsersService {
   private signAccessToken({ user_id, isFirstLogin, role }: { user_id: string, isFirstLogin: boolean, role: UserRole }) {
     const options: SignOptions = {
-      expiresIn: (process.env.ACCESS_TOKEN_EXPIRES_IN as StringValue) || "15m"
+      expiresIn: (process.env.ACCESS_TOKEN_EXPIRES_IN as StringValue) || "5m"
     }
 
     return signToken(

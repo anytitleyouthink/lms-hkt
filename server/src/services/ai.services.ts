@@ -3,6 +3,7 @@ import { PDFParse } from 'pdf-parse'
 import fs from 'fs'
 import quizzesService from './quizzes.services'
 import { config } from 'dotenv'
+import { ObjectId } from 'mongodb'
 
 config()
 
@@ -21,11 +22,18 @@ class AiService {
       if (!documentText || documentText.trim().length < 10) {
         throw new Error('File PDF không có nội dung chữ!')
       }
-      console.log(documentText) // Debug: In ra nội dung đã đọc được từ PDF
-      const prompt = `Bạn là chuyên gia thiết kế bài giảng. Tạo 5 câu hỏi trắc nghiệm JSON tiếng Việt từ nội dung này. 
-      CHỈ trả về mảng JSON, KHÔNG có dấu nháy code hay chữ giải thích.
-      Định dạng: [{"question_text": "...", "options": ["", "", "", ""], "correct_answer": 0, "explanation": "..."}]
-      Nội dung: ${documentText}`
+
+      console.log('--- PDF TEXT EXTRACTED ---');
+      console.log(documentText.substring(0, 500) + '...'); // Log preview
+      
+      const prompt = `Bạn là chuyên gia thiết kế bài giảng. Hãy tạo 5 câu hỏi trắc nghiệm khách quan từ nội dung sau đây. 
+      Nội dung: ${documentText}
+
+      Yêu cầu:
+      - Trả về DỮ LIỆU JSON NGUYÊN BẢN (không có markdown, không có chữ dẫn).
+      - Định dạng: Một mảng các đối tượng câu hỏi.
+      - Mỗi đối tượng gồm: question_text (chuỗi), options (mảng 4 lựa chọn), correct_answer (số nguyên 0-3), explanation (giải thích tại sao chọn đáp án đó).
+      - Ví dụ: [{"question_text": "...", "options": ["A", "B", "C", "D"], "correct_answer": 0, "explanation": "..."}]`
 
       // 2. Gọi AI bằng phương thức mới của @google/genai
       const response = await ai.models.generateContent({
@@ -39,7 +47,14 @@ class AiService {
       // 3. Làm sạch chuỗi trả về (đề phòng AI tự chèn markdown ```json)
       aiResponse = aiResponse.replace(/```json|```/g, "").trim()
       
-      const questions = JSON.parse(aiResponse)
+      let questions = JSON.parse(aiResponse)
+
+      // Cực kỳ quan trọng: Gắn ID duy nhất cho từng câu hỏi 
+      // để Frontend phân biệt được các câu và tránh lỗi React Key
+      questions = questions.map((q: any) => ({
+        ...q,
+        _id: new ObjectId().toString() 
+      }))
 
       // 4. Lưu vào Database
       const newQuiz = await quizzesService.createQuiz({

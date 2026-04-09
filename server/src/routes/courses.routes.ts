@@ -55,6 +55,7 @@ coursesRouter.get(
 coursesRouter.get(
   '/:course_id',
   accessTokenValidationMiddleware,
+  checkEnrollmentExistMiddleware,
   courseIdValidator, 
   wrapAsync(getCourseByIdController)
 )
@@ -87,14 +88,14 @@ coursesRouter.patch(
   '/:course_id',
   accessTokenValidationMiddleware,
   checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
-  checkEnrollmentExistMiddleware,
+  // checkEnrollmentExistMiddleware,
   courseIdValidator,             
  updateCourseValidator,
   wrapAsync(updateCourseController)
 )
 /**
  * Description: Lấy chi tiết khóa học (bao gồm thông tin cơ bản + danh sách chương học + danh sách bài học)
- * Path: /courses/:course_id
+ * Path: /courses/:course_id/detail
  * Method: get
  * Header: { Authorization: Bearer <access_token> }
  * Body: { course_id: string }

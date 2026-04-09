@@ -1,42 +1,39 @@
-import React from 'react'
-import './globals.css'
-import Sidebar from '../../components/shared/Sidebar'
-import Header from '../../components/shared/Header'
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import Providers from "@/lib/react-query";
+import { Toaster } from "@/components/ui/sonner";
 
-export const metadata = {
-  title: 'LMS - Academy',
-  description: 'Hệ thống quản lý học tập',
-}
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "LMS Frontend",
+  description: "LMS Frontend application",
+};
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="vi">
-      <body className="antialiased m-0 p-0">
-        <div className="flex min-h-screen bg-[#f8faff]">
-          
-          {/* Sidebar */}
-          {/* <Sidebar /> */}
-
-          {/* Main content */}
-          <div className="flex-1 flex flex-col min-h-screen">
-            
-            {/* Header */}
-            {/* <Header /> */}
-
-            {/* Page content */}
-            <main className="flex-1 overflow-y-auto p-6">
-              <div className="max-w-7xl mx-auto">
-                {children}
-              </div>
-            </main>
-
-          </div>
-        </div>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col">
+        <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
-  )
+  );
 }

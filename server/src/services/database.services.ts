@@ -10,6 +10,8 @@ import Message from "~/models/schemas/Message.schema";
 import Enrollment from "~/models/schemas/Enrollment.schema";
 import Certificate from "~/models/schemas/Certificate.schema";
 import UserProgress from "~/models/schemas/UserProgress.schema";
+import { QuizResultType } from "~/models/schemas/QuizResult.schema";
+import Notification from "~/models/schemas/Notification.schema";
 
 
 dotenv.config();
@@ -86,6 +88,13 @@ class DatabaseService {
       { key: { user_id: 1, course_id: 1, lesson_id: 1 }, unique: true }
     ]);
   }
+  
+  async indexQuizResults() {
+    await this.quizResults.createIndexes([
+      { key: { user_id: 1 } },
+      { key: { quiz_id: 1 } }
+    ]);
+  }
 
   async setupAllIndexes() {
     await Promise.all([
@@ -97,7 +106,8 @@ class DatabaseService {
       this.indexMessages(),
       this.indexEnrollments(),
       this.indexCertificates(),
-      this.indexUserProgresses()
+      this.indexUserProgresses(),
+      this.indexQuizResults()
     ]);
   }
 
@@ -132,6 +142,14 @@ class DatabaseService {
   }
   get userProgresses(): Collection<UserProgress> {
     return this.db.collection('user_progresses')
+  }
+
+  get quizResults(): Collection<QuizResultType> {
+    return this.db.collection('quiz_results')
+  }
+
+  get notifications(): Collection<Notification> {
+    return this.db.collection('notifications')
   }
 }
 

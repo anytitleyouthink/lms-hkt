@@ -1,7 +1,7 @@
 import { c } from '@faker-js/faker/dist/airline-Dz1uGqgJ'
 import { Router } from 'express'
 import { UserRole } from '~/constants/enums'
-import { approveEnrollmentController, getEnrollmentRequestsByCourseController, getPendingEnrollmentsController, requestEnrollmentController } from '~/controllers/enrollments.controllers'
+import { approveEnrollmentController, getEnrollmentRequestsByCourseController, getPendingEnrollmentsController, requestEnrollmentController, rejectEnrollmentController, getMyEnrolledCoursesController } from '~/controllers/enrollments.controllers'
 import { enrollValidator } from '~/middlewares/enrollments.middlewares'
 
 
@@ -24,6 +24,17 @@ enrollmentsRouter.post(
   accessTokenValidationMiddleware,
   enrollValidator,     
   requestEnrollmentController
+)
+
+/**
+ * Description: Lấy danh sách khóa học mà nhân viên đã tham gia thành công
+ * Path: /enrollments/my-courses
+ * Method: GET
+ */
+enrollmentsRouter.get(
+  '/my-courses',
+  accessTokenValidationMiddleware,
+  wrapAsync(getMyEnrolledCoursesController)
 )
 
 /**
@@ -54,9 +65,22 @@ enrollmentsRouter.patch(
    checkRoleMiddleware([UserRole.Trainer, UserRole.Admin]), 
   wrapAsync(approveEnrollmentController)
 )
-// Path: /enrollments/:course_id/requests
+
+/**
+ * Description: Xóa/Từ chối yêu cầu đăng ký
+ * Path: /enrollments/:enrollment_id/reject
+ * Method: DELETE
+ * Header: { Authorization: Bearer <access_token> }
+ */
+enrollmentsRouter.delete(
+  '/:enrollment_id/reject',
+  accessTokenValidationMiddleware,
+  checkRoleMiddleware([UserRole.Trainer, UserRole.Admin]), 
+  wrapAsync(rejectEnrollmentController)
+)
+// Path: /enrollments/:course_id/list-user-course
 enrollmentsRouter.get(
-  '/:course_id/requests',
+  '/:course_id/list-user-course',
   accessTokenValidationMiddleware,
   checkRoleMiddleware([UserRole.Trainer, UserRole.Admin]),
   wrapAsync(getEnrollmentRequestsByCourseController)

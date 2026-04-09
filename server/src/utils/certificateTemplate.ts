@@ -1,16 +1,16 @@
 export const generateCertificateHTML = (
-  studentName: string,
-  courseName: string,
-  issueDate: Date,
-  certificateId: string
+    studentName: string,
+    courseName: string,
+    issueDate: Date,
+    certificateId: string
 ) => {
-  const formattedDate = new Intl.DateTimeFormat('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  }).format(issueDate)
+    const formattedDate = new Intl.DateTimeFormat('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    }).format(issueDate)
 
-  return `
+    return `
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -185,7 +185,7 @@ export const generateCertificateHTML = (
 
         <div class="footer">
             <div class="signature-block">
-                <div class="signature-line"></div>
+                <div class="signature-line" style="margin-bottom: 5px; ></div>
                 <div class="signature-text">Ngày Cấp: ${formattedDate}</div>
             </div>
             
@@ -193,7 +193,7 @@ export const generateCertificateHTML = (
 
             <div class="signature-block">
                 <div class="signature-line" style="margin-bottom: 5px;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Signature_of_John_Hancock.svg" alt="Signature" height="40" style="margin-bottom: -15px;">
+                  
                 </div>
                 <div class="signature-text">Ban Giám Đốc</div>
                 <div class="cert-id">ID: ${certificateId}</div>

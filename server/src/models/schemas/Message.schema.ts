@@ -2,7 +2,8 @@ import { ObjectId } from "mongodb";
 
 export interface MessageType {
   _id?: ObjectId;
-  course_id: ObjectId;
+  course_id?: ObjectId;
+  room_id?: string;
   sender_id: ObjectId;
   content: string;
   created_at?: Date;
@@ -11,7 +12,8 @@ export interface MessageType {
 
 export default class Message {
   _id: ObjectId;
-  course_id: ObjectId;
+  course_id?: ObjectId;
+  room_id?: string;
   sender_id: ObjectId;
   content: string;
   created_at: Date;
@@ -20,6 +22,7 @@ export default class Message {
   constructor(message: MessageType) {
     this._id = message._id || new ObjectId();
     this.course_id = message.course_id;
+    this.room_id = message.room_id;
     this.sender_id = message.sender_id;
     this.content = message.content;
     this.created_at = message.created_at || new Date();

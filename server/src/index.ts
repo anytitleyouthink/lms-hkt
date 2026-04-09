@@ -13,8 +13,12 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: { origin: '*' } // Allow all origins for the socket. Adjust in production
 });
+app.set('io', io);
 const port = 4000
-app.use(cors())
+app.use(cors({
+  origin: true,
+  credentials: true
+}))
 app.use(cookieParser())
 app.use(express.json())
 databaseService.connect().then(() => {

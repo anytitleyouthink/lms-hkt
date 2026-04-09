@@ -28,7 +28,21 @@ class LessonsService {
       .sort({ order: 1 })
       .toArray()
   }
-}
+  async updateLesson(lesson_id: string, payload: any) {
+    const result = await databaseService.lessons.findOneAndUpdate(
+      { _id: new ObjectId(lesson_id) },
+      { $set: payload },
+      { returnDocument: 'after' }
+    )
+    return result
+  }
 
+  async deleteLesson(lesson_id: string) {
+    const result = await databaseService.lessons.findOneAndDelete(
+      { _id: new ObjectId(lesson_id) }
+    )
+    return result
+  }
+}
 const lessonsService = new LessonsService()
 export default lessonsService

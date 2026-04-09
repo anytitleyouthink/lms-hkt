@@ -54,9 +54,10 @@ export const updateCourseController = async (
   })
 }
 export const getCourseDetailController = async (req: Request, res: Response) => {
-  const { course_id } = req.body;
+  const { course_id } = req.params;
+  const { role } = req.decoded_access_token as any;
 
-    const courseDetail = await coursesService.getCourseDetail(course_id);
+    const courseDetail = await coursesService.getCourseDetail(course_id, role);
 
     // Nếu mảng rỗng tức là không tìm thấy
     if (courseDetail.length === 0) {

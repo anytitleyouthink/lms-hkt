@@ -16,10 +16,9 @@ const confirmPasswordSchema = z.string()
 
 const nameSchema = z.string()
   .min(1, userMessages.NAME_REQUIRED)
-  .min(6, userMessages.NAME_LENGTH_MUST_BE_FROM_6_TO_100)
   .max(100, userMessages.NAME_INVALID)
   .trim()
-  .regex(/^[a-zA-Z\s]+$/, userMessages.NAME_ONLY_LETTERS);
+  .regex(/^[\p{L}\s]+$/u, userMessages.NAME_ONLY_LETTERS);
 
 const dateOfBirthSchema = z.string().optional()
   .refine((date) => !isNaN(Date.parse(date as string)), userMessages.DATE_OF_BIRTH_INVALID);

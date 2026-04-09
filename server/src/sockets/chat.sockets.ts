@@ -27,7 +27,10 @@ export const setupChatSocket = (io: Server) => {
   io.on('connection', (socket: Socket) => {
     const user = (socket as any).data.user;
 
-   
+    // Tham gia phòng chung của user để nhận thông báo cá nhân
+    socket.join(`user_${user.user_id}`);
+    console.log(`User ${user.user_id} joined room user_${user.user_id}`);
+
     socket.on('join_course', async (course_id: string) => {
   
       const isEnrolled = await databaseService.enrollments.findOne({
@@ -54,8 +57,18 @@ export const setupChatSocket = (io: Server) => {
              content
            });
 
-           await databaseService.messages.insertOne(newMessage);
-           io.to(`course_${course_id}`).emit('receive_message', newMessage);
+            await databaseService.messages.insertOne(newMessage);
+            
+            // Lấy thêm thông tin người gửi để frontend hiển thị ngay lập tức
+            const sender = await databaseService.users.findOne(
+              { _id: new ObjectId(user.user_id) },
+              { projection: { name: 1, avatar: 1 } }
+            );
+
+            io.to(`course_${course_id}`).emit('receive_message', {
+              ...newMessage,
+              sender_info: sender
+            });
        } catch (error) {
            socket.emit('error', messageMessages.ERROR_WHILE_SENDING_MESSAGE);
        }

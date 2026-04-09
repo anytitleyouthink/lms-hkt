@@ -23,6 +23,20 @@ class SectionsService {
     return newSection
   }
 
+  async updateSection(section_id: string, payload: any) {
+    const result = await databaseService.sections.findOneAndUpdate(
+      { _id: new ObjectId(section_id) },
+      { 
+        $set: { 
+          ...payload,
+          updated_at: new Date()
+        } 
+      },
+      { returnDocument: 'after' }
+    )
+    return result
+  }
+
   // Tiện tay làm luôn hàm lấy danh sách chương của 1 khóa học
  
   

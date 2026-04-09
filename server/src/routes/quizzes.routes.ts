@@ -7,6 +7,7 @@ import { lessonIdValidator } from '~/middlewares/lessons.middlewares' // Import 
 import { UserRole } from '~/constants/enums'
 import { wrapAsync } from '~/utils/handlers'
 import { generateQuizController } from '~/controllers/ai.controllers'
+import { getQuizController, submitQuizController, createQuizController } from '~/controllers/quizzes.controllers'
 import { uploadDocMiddleware } from '~/middlewares/uploads.middlewares'
 
 const quizzesRouter = Router()
@@ -22,7 +23,7 @@ const quizzesRouter = Router()
 quizzesRouter.post(
   '/',
   accessTokenValidationMiddleware,
-  // checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]), 
+  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]), 
   validate(createQuizSchema), 
   lessonIdValidator,         
   wrapAsync(generateQuizController)
@@ -38,8 +39,24 @@ quizzesRouter.post(
  */
 quizzesRouter.post(
   '/generate', 
+  accessTokenValidationMiddleware,
+  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
   uploadDocMiddleware, // Bắt file và lưu xuống local trước
   generateQuizController // Xử lý AI và xóa file
 )
+
+// Get Quiz (With hidden answers via projection in service)
+quizzesRouter.get(
+  '/:quiz_id',
+  accessTokenValidationMiddleware,
+  wrapAsync(getQuizController)
+);
+
+// Submit Quiz attempt for grading
+quizzesRouter.post(
+  '/:quiz_id/submit',
+  accessTokenValidationMiddleware,
+  wrapAsync(submitQuizController)
+);
 
 export default quizzesRouter

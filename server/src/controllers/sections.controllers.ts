@@ -16,6 +16,13 @@ export const createSectionController = async (
   })
 }
 
+export const updateSectionController = async (req: Request, res: Response) => {
+  const { section_id } = req.params;
+  const result = await sectionsService.updateSection(section_id, req.body);
+  if (!result) return res.status(404).json({ message: "Section not found" });
+  return res.json({ message: courseMessages.SECTION_UPDATED_SUCCESS || "Section updated successfully", result });
+};
+
 
 export const deleteSectionController = async (req: Request, res: Response) => {
   const { section_id } = req.params;

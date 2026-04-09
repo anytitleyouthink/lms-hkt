@@ -27,12 +27,12 @@ export const enrollValidator = (req: Request, res: Response, next: NextFunction)
 }
 export const checkEnrollmentExistMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { course_id } = req.body || req.params
+    const course_id = req.params.course_id || req.params.id || req.body.course_id
     const user_id = (req.decoded_access_token as any)?.user_id
     const enrollment = await databaseService.enrollments.findOne({
       user_id: new ObjectId(user_id),
       course_id: new ObjectId(course_id),
-       status: EnrollmentStatus.Approved
+      status: EnrollmentStatus.Approved
     })
 
     if (enrollment) {

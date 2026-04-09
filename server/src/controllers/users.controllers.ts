@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import usersService from "~/services/users.services";
 // Constants & Errors
 import { userMessages } from "~/constants/messages";
-import { UserRole } from "~/constants/enums";
+import { UserRole, CourseStatus } from "~/constants/enums";
 import { ErrorResponse } from "~/models/Errors";
 import {
   LoginReqBody,
@@ -32,16 +32,17 @@ export const getMeController = async (req: Request, res: Response) => {
   const user = req.decoded_access_token as TokenPayload;
   const user_id = user.user_id;
   const result = await usersService.getMe(user_id);
-  console.log(result)
   return res.status(StatusCodes.OK).json({ 
     message: userMessages.GET_ME_SUCCESS,
     name: result?.name,
     username: result?.username,
     email: result?.email,
     date_of_birth: result?.date_of_birth,
-    
+    role: result?.role,
+    result: result
   });
 };
+
 export const updateMeController = async (req: Request<ParamsDictionary, any, UpdateMeReqBody>, res: Response) => {   
   const {user_id} = req.decoded_access_token as TokenPayload;
   const result = await usersService.updateMe(user_id, req.body);
@@ -50,6 +51,7 @@ export const updateMeController = async (req: Request<ParamsDictionary, any, Upd
     result
   });
 };
+
 export const getProfileController = async (req: Request<GetProfileReqParams>, res: Response) => {
   const { username } = req.params;
   const result = await usersService.getProfile(username);
@@ -65,6 +67,7 @@ export  const changePasswordController= async(req: Request<ParamsDictionary, any
   const result = await usersService.changePassword(user_id, password);
   return res.json(result);
 }
+
 export const createUserController = async (req: Request<ParamsDictionary, any, CreateUserByAdminReqBody>, res: Response) => {
 const { name, email, role, } = req.body
 const defaultPassword = process.env.DEFAULTPassword || '12345678';
@@ -80,18 +83,13 @@ return res.status(StatusCodes.CREATED).json({
     message: userMessages.USER_CREATED_SUCCESS,
     access_token
    });
-
 }
-
-
-
-
 
 export const getUsersController = async (req: Request, res: Response) => {
   const { email, search } = req.query;
   const result = await usersService.getUsers((search || email) as string);
   return res.json({
-    message: userMessages.GET_PROFILE_SUCCESS, // Reused message for simplicity
+    message: userMessages.GET_PROFILE_SUCCESS,
     result
   });
 };
@@ -104,62 +102,66 @@ export const toggleUserStatusController = async (req: Request, res: Response) =>
     result
   });
 };
-// users.controllers.ts (Hoặc file controller của Dashboard)
 
 export const getEmployeeDashboardController = async (req: Request, res: Response) => {
   const { user_id } = (req as any).decoded_access_token;
 
-    // 1. Lấy thông tin User để hiện lên Header
-    const userProfile = await databaseService.users.findOne(
-      { _id: new ObjectId(user_id) },
-      { projection: { password: 0, refresh_token: 0 ,forgot_password_token: 0} }
-    );
+  // 1. Lấy thông tin User để hiện lên Header
+  const userProfile = await databaseService.users.findOne(
+    { _id: new ObjectId(user_id) },
+    { projection: { password: 0, refresh_token: 0, forgot_password_token: 0 } }
+  );
 
-    // 2. Tìm 3 khóa học GẦN NHẤT mà user này đã đăng ký
-    const recentEnrollments = await databaseService.enrollments
-      .find({ user_id: new ObjectId(user_id) })
-      .sort({ created_at: -1 }) // Xếp mới nhất lên đầu
-      .limit(3)
-      .toArray();
-    const recentCoursesWithProgress = await Promise.all(
-      recentEnrollments.map(async (enrollment) => {
-        const courseIdStr = enrollment.course_id.toString();
+  // 2. Tìm 3 khóa học GẦN NHẤT mà user này đã đăng ký
+  const recentEnrollments = await databaseService.enrollments
+    .find({ user_id: new ObjectId(user_id) })
+    .sort({ created_at: -1 })
+    .limit(3)
+    .toArray();
 
-    
-        const courseDetail = await databaseService.courses.findOne(
-          { _id: enrollment.course_id },
-          { projection: { title: 1, thumbnail: 1 } } // Chỉ lấy những gì Dashboard cần cho nhẹ
-        );
+  const recentCoursesWithProgress = await Promise.all(
+    recentEnrollments.map(async (enrollment) => {
+      const courseIdStr = enrollment.course_id.toString();
 
-        const progressData = await progressServices.getCourseProgress(user_id, courseIdStr);
+      const courseDetail = await databaseService.courses.findOne(
+        { _id: enrollment.course_id },
+        { projection: { title: 1, thumbnail: 1 } }
+      );
 
-        return {
-          course_info: courseDetail,
-          progress_detail: progressData 
-        };
-      })
-    );
+      const progressData = await progressServices.getCourseProgress(user_id, courseIdStr);
 
-    return res.json({
-      message: userMessages.GET_EMPLOYEE_DASHBOARD_SUCCESS,
-      result: {
-        profile: userProfile,
-        recent_learning: recentCoursesWithProgress
-      }
-    });
+      return {
+        course_info: courseDetail,
+        progress_detail: progressData
+      };
+    })
+  );
+
+  // 3. Đếm tổng số chứng chỉ đã đạt được
+  const totalCertificates = await databaseService.certificates.countDocuments({
+    user_id: new ObjectId(user_id)
+  });
+
+  return res.json({
+    message: userMessages.GET_EMPLOYEE_DASHBOARD_SUCCESS,
+    result: {
+      profile: userProfile,
+      recent_learning: recentCoursesWithProgress,
+      total_certificates: totalCertificates
+    }
+  });
 };
+
 export const getTrainerDashboardController = async (req: Request, res: Response) => {
   const { user_id } = (req as any).decoded_access_token
 
-  
   const profile = await databaseService.users.findOne(
     { _id: new ObjectId(user_id) },
     { projection: { password: 0, refresh_token: 0, forgot_password_token: 0} }
   )
 
-  const coursesWithStudentCount = await databaseService.courses.aggregate([
-    { $match: { trainer_id: new ObjectId(user_id), status: { $ne: 'deleted' } } },
-    
+  const allTrainerCourses = await databaseService.courses.aggregate([
+    { $match: { trainer_id: new ObjectId(user_id), status: { $ne: CourseStatus.Deleted } } },
     {
       $lookup: {
         from: 'enrollments',
@@ -168,14 +170,11 @@ export const getTrainerDashboardController = async (req: Request, res: Response)
         as: 'students'
       }
     },
-
-    // Thêm một trường mới là total_students bằng độ dài của mảng students vừa join
     {
       $addFields: {
         total_students: { $size: '$students' }
       }
     },
-
     {
       $project: {
         title: 1,
@@ -188,10 +187,9 @@ export const getTrainerDashboardController = async (req: Request, res: Response)
     { $sort: { created_at: -1 } }
   ]).toArray()
 
-  // 3. Tính toán nhanh các con số thống kê tổng quát (Số khóa, Tổng học viên)
   const stats = {
-    total_courses: coursesWithStudentCount.length,
-    total_all_students: coursesWithStudentCount.reduce((sum, course) => sum + course.total_students, 0)
+    total_courses: allTrainerCourses.length,
+    total_all_students: allTrainerCourses.reduce((sum, course) => sum + course.total_students, 0)
   }
 
   return res.json({
@@ -199,7 +197,7 @@ export const getTrainerDashboardController = async (req: Request, res: Response)
     result: {
       profile,
       stats,
-      courses: coursesWithStudentCount
+      courses: allTrainerCourses.slice(0, 3) 
     }
   })
 }

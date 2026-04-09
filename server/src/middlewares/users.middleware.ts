@@ -142,7 +142,7 @@ export const accessTokenValidationMiddleware = async (req: Request, res: Respons
 export const refreshTokenValidationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const refresh_token = req.cookies.refresh_token; 
  
-    
+    console.log('Received refresh token from cookie:', refresh_token);
     if (!refresh_token) {
         return next(new ErrorResponse(userMessages.REFRESH_TOKEN_REQUIRED, StatusCodes.UNAUTHORIZED));
     }

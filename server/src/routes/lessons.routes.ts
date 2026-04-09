@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createLessonController, getLessonsController } from '~/controllers/lessons.controllers'
+import { createLessonController, getLessonsController, deleteLessonController, updateLessonController } from '~/controllers/lessons.controllers'
 import { accessTokenValidationMiddleware, checkRoleMiddleware } from '~/middlewares/users.middleware'
 
 import { createLessonSchema } from '~/validations/lessons.validation'
@@ -39,6 +39,20 @@ lessonsRouter.get(
   '/section/:section_id',
   accessTokenValidationMiddleware,
   wrapAsync(getLessonsController)
+)
+
+lessonsRouter.patch(
+  '/:lesson_id',
+  accessTokenValidationMiddleware,
+  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
+  wrapAsync(updateLessonController)
+)
+
+lessonsRouter.delete(
+  '/:lesson_id',
+  accessTokenValidationMiddleware,
+  checkRoleMiddleware([UserRole.Admin, UserRole.Trainer]),
+  wrapAsync(deleteLessonController)
 )
 
 export default lessonsRouter

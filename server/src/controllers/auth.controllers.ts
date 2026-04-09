@@ -72,7 +72,7 @@ export const refreshTokenController = async (
       message: userMessages.REFRESH_TOKEN_REQUIRED
     })
   }
-
+console.log('Decoded refresh token:', req.decoded_refresh_token);
 
   const decoded = req.decoded_refresh_token as TokenPayload
   const user = await databaseService.users.findOne({ _id: new ObjectId(decoded.user_id) })
@@ -85,8 +85,8 @@ export const refreshTokenController = async (
   const result = await usersService.refreshToken(
     decoded.user_id,
     decoded.isFirstLogin,
+    refreshToken,
     decoded.role as UserRole,
-    refreshToken
   )
 
 

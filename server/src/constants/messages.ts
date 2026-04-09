@@ -110,8 +110,10 @@ export const courseMessages = {
   SECTION_ID_INVALID: 'Section ID is invalid',
   SECTION_DELETED_SUCCESS: 'Section deleted successfully',
   SECTION_NOT_FOUND: 'Section not found',
+  SECTION_UPDATED_SUCCESS: 'Section updated successfully',
   LESSON_TITLE_TOO_SHORT: 'Lesson title must be at least 2 characters',
   LESSON_CREATED_SUCCESS: 'Lesson created successfully',
+  LESSON_UPDATED_SUCCESS: 'Lesson updated successfully',
   GET_LESSONS_SUCCESS: 'Get lessons successfully',
   
 
